@@ -24,15 +24,15 @@
 /*
 **	first.c
 */
-void		check_key(void);
+void		check_key(char **av);
 
 /*
 **	init.c
 */
 int			useless(int c);
-void		start_new_w();
+char		*start_new_w();
 void		poscur(int x, int y);
-void		init_fd(char *path, char **av);
-void		add_argv(char *path, char **av);
+void		init_fd(char *path);
+void		add_argv(char **av);
 
 #endif

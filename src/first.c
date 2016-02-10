@@ -12,12 +12,13 @@
 
 # include "ft_select.h"
 
-void		check_key(void)
+void		check_key(char **av)
 {
-	char	*res;
 	char	*none;
 
-	res = tgetstr("cm", &none);
+	add_argv(av);
+//	tgetstr("cm", &none);
+
 	while (1)
 	{
 		char	buff[3];
@@ -25,7 +26,6 @@ void		check_key(void)
 		read(0 , buff, 3);
 		if (buff[0] == 27)
 		{
-			//ft_putstr("fleche");
 			if (buff[2] == 'A')
 				tputs(tgetstr("up", &none), 1, useless);
 			else if (buff[2] == 'B')
@@ -42,6 +42,7 @@ void		check_key(void)
 			ft_putstr("cmd + d");
 			return ;
 		}
+		ft_bzero(buff, 3);
 	}
 	return ;
 }

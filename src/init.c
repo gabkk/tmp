@@ -12,65 +12,54 @@
 
 # include "ft_select.h"
 
-void		start_new_w()
+char		*start_new_w()
 {
 	char 	*none;
 	char	*path;
 	char	*CD;
-	char 	**av;
 
-	av = (char **)malloc(sizeof(char *) * 2);
-	av[0] = ft_strdup("Yo");
-	av[1] = NULL;
 	path = tgetstr("is", &none);//init term
 	if (path)
 	{
 		tputs(path, 1, useless);
-
-		init_fd(path, av);
-		add_argv(path, av);
 	}
-
 	poscur(0, 0); // positionne cursor
 	if ((CD = tgetstr("cd", &none)) == NULL) //clear from the cursor to the end of the screen
 		CD = tgetstr("cl", &none);
 	tputs(CD, 1, useless);
+	return (path); 
 }
 
-void		init_fd(char *path, char **av)
+void		init_fd(char *path)
 {
 	char	buff[513];
 	int		fd;
 	int		n;
 
-	fd = open(path, 0, 0);
-	ft_putnbr(fd);
+	fd = open(path, 0, O_RDWR);
+	//ft_putnbr(fd);
 	if (fd >= 0)
 	{
-		tputs(av[0], 1, useless);
+		//tputs(av[0], 1, useless);
 		while ((n = read( fd, buff, 512)))
 		{
 			write(fd, buff, n);
-			close(fd);
 		}
 	}
+	close(fd);
 }
 
-void		add_argv(char *path, char **av)
+void			add_argv(char **av)
 {
-	int		fd;
+	int		i;
+	//char	*none;
 
-	fd = open(path, 0, 0);
-	ft_putnbr(fd);
-	
-	if (fd >= 0)
+	i = 1;
+	while (av[i])
 	{
-		if (*av)
-		{
-			write(fd, av[0], ft_strlen(av[0]) + 1);
-			close(fd);
-			//(*av)++;
-		}
+		ft_putendl(av[i]);
+		//tputs(tgetstr( "do", &none), 1, useless);
+		i++;
 	}
 }
 

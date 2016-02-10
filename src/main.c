@@ -16,6 +16,7 @@ int			main(int ac, char **av, char **env)
 {
 	const char	*tname;
 	struct termios term;
+	char		*path;
 
 	(void)ac;
 	(void)env;
@@ -35,9 +36,10 @@ int			main(int ac, char **av, char **env)
 	if (tcsetattr(0, TCSADRAIN, &term) == -1)
 		return (-1);
 
-	start_new_w();
-
-	check_key();
+	path = start_new_w();
+//	ft_putstr("BEGIN");
+	init_fd(path);
+	check_key(av);
 
 	/*END*/
 	if (tcgetattr(0, &term) == -1)
