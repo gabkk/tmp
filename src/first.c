@@ -12,12 +12,9 @@
 
 # include "ft_select.h"
 
-void		check_key(char **av)
+void		check_key()
 {
 	char	*none;
-
-	add_argv(av);
-//	tgetstr("cm", &none);
 
 	while (1)
 	{

@@ -19,20 +19,45 @@
 # include <term.h>
 # include <stdlib.h>
 # include <fcntl.h>
+# include <sys/ioctl.h>
+# include <stdio.h>
 
+//typedef struct termios *t_term;
+typedef struct 			s_arg{
+		char			*name;
+		int				x;
+		int				y;
+		struct s_arg	*next;
+}						t_arg;
 
 /*
 **	first.c
 */
-void		check_key(char **av);
+void				check_key(void);
 
 /*
 **	init.c
 */
-int			useless(int c);
-char		*start_new_w();
-void		poscur(int x, int y);
-void		init_fd(char *path);
-void		add_argv(char **av);
+int					useless(int c);
+void				start_new_w();
+void				poscur(int x, int y);
+void				init_fd(char *path);
+void				add_argv(t_arg *arg, int fd);
+void				winsize(int fd, int *j);
+
+/*
+** main.c
+*/
+int					check_terminal();
+struct termios		set_term();
+int 				unset_term(struct termios term);
+
+/*
+** init_list.c
+*/
+
+void			init_list(t_arg **argu, char **av, int fd);
+void			addlist(t_arg **argu, char *av, int i, int fd);
+t_arg			*setmarg(void);
 
 #endif
