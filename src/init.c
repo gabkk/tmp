@@ -45,14 +45,31 @@ void		init_fd(char *path)
 void			add_argv(t_arg *arg, int fd)
 {
 	t_arg		*ptr;
+	int			x;
+	int			y;
 	//char	*none;
 
+	y = 0;
 	ptr = arg;
 	while (ptr)
 	{
+		// ft_putstr_fd("x : ", fd);
+		// ft_putnbr_fd(ptr->x, fd);
+		// ft_putstr_fd(" y : ", fd);
+		// ft_putnbr_fd(ptr->y, fd);
+		x = 0;
+		y = 5;
+		while (x < 3)
+		{
+			write(fd, "\n", 1);
+			x++;
+		}
+		while (y <= ptr->y)
+		{
+			write(fd, "\t", 1);
+			y++;
+		}
 		ft_putendl_fd(ptr->name, fd);
-		ft_putnbr_fd(ptr->x, fd);
-		ft_putnbr_fd(ptr->y, fd);
 		ptr = ptr->next;
 	}
 }

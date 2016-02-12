@@ -15,28 +15,41 @@
 void			init_list(t_arg **argu, char **av, int fd)
 {
 	int			i;
+	int			j[2];
+	int			tot;
+	int			margex;
+	int			posx;
+	int			posy;
 
+	tot = 0;
+	winsize(fd, j);
 	i = 1;
 	while (av[i])
 	{
-		addlist(argu , av[i], i, fd);
+		i++;
+		tot++;
+	}
+	if (tot > 0)
+		margex = (int)(j[0] / tot);
+	posy = 5;
+	posx = 0;
+	// ft_putnbr_fd(j[0], 2);
+	// ft_putnbr_fd(j[1], 2);
+	i = 1;
+	while (av[i])
+	{
+		posx = margex * i;
+		addlist(argu , av[i], posx, posy);
 		i++;
 	}
 }
 
 
-void			addlist(t_arg **argu, char *av, int i, int fd)
+void			addlist(t_arg **argu, char *av, int posx, int posy)
 {
 	t_arg		*ptr;
 	t_arg		*newm;
-	int			j[2];
-	int			posx;
-	int			posy;
 
-
-	winsize(fd, j);
-	posx = j[0] + i;
-	posy = j[1] + i;
 	if (!av)
 		return ;
 	newm = setmarg();

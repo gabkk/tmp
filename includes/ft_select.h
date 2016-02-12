@@ -57,7 +57,7 @@ int 				unset_term(struct termios term);
 */
 
 void			init_list(t_arg **argu, char **av, int fd);
-void			addlist(t_arg **argu, char *av, int i, int fd);
+void			addlist(t_arg **argu, char *av, int posx, int posy);
 t_arg			*setmarg(void);
 
 #endif
