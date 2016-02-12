@@ -42,44 +42,79 @@ void		init_fd(char *path)
 	close(fd);
 }
 
-void			add_argv(t_arg *arg, int fd)
+void			add_argv(t_arg *arg, int fd, t_env *env)
 {
 	t_arg		*ptr;
 	int			x;
-	int			y;
-	//char	*none;
+	// int			y;
+	// //char	*none;
+	int			reachtot;
+	int			size;
 
-	y = 0;
-	ptr = arg;
-	while (ptr)
+	reachtot = 0;
+	x = 1;
+	size = 0;
+	// y = 0;
+	(void)env;
+		// ft_putstr_fd("env tot : ", fd);
+		// ft_putnbr_fd(env->tot, fd);
+		// ft_putstr_fd(" windows x : ", fd);
+		// ft_putnbr_fd(env->j[0], fd);
+		// ft_putstr_fd(" windows y : ", fd);
+		// ft_putnbr_fd(env->j[1], fd);
+		// ft_putchar_fd('\n', 2);
+
+	while (reachtot < env->tot)
 	{
-		// ft_putstr_fd("x : ", fd);
-		// ft_putnbr_fd(ptr->x, fd);
-		// ft_putstr_fd(" y : ", fd);
-		// ft_putnbr_fd(ptr->y, fd);
-		x = 0;
-		y = 5;
-		while (x < 3)
+		ptr = arg;
+		while (ptr)
 		{
-			write(fd, "\n", 1);
-			x++;
+			// ft_putstr_fd("x : ", fd);
+			// ft_putnbr_fd(ptr->x, fd);
+			// ft_putstr_fd(" y : ", fd);
+			// ft_putnbr_fd(ptr->y, fd);
+
+			/*responsive
+			x = 0;
+			y = 5;
+			while (x < 3)
+			{
+				write(fd, "\n", 1);
+				x++;
+			}
+			while (y <= ptr->y)
+			{
+				write(fd, "\t", 1);
+				y++;
+			}
+			end responsive*/
+			if (ptr->x == x)
+			{
+				size = ft_strlen(ptr->name);
+				if (size < env->wordmax)
+					size = env->wordmax - size + 2;
+				else
+					size = 2;
+				ft_putstr_fd(ptr->name, fd);
+				while (size > 0)
+				{
+					ft_putchar_fd(' ', fd);
+					size--;
+				}
+				reachtot++;
+			}
+			ptr = ptr->next;
 		}
-		while (y <= ptr->y)
-		{
-			write(fd, "\t", 1);
-			y++;
-		}
-		ft_putendl_fd(ptr->name, fd);
-		ptr = ptr->next;
+		ft_putchar_fd('\n', fd);
+		x++;
 	}
 }
 
 void		poscur(int x, int y)
 {
-	char 	*none;
 	char	*CM;
 
-	CM = tgetstr("cm", &none);
+	CM = tgetstr("cm", NULL);
 	tputs(tgoto(CM, y , x), 1, useless);
 }
 
@@ -87,18 +122,4 @@ int			useless(int c)
 {
 	write( 1, &c, 1);
 	return (0);
-}
-
-void			winsize(int fd, int *i)
-{
-	struct winsize w;
-    ioctl(fd, TIOCGWINSZ, &w);
-
-    i[0] = w.ws_row;
-    i[1] = w.ws_col;
-    // ft_putstr_fd("line : ", 2);
-    // ft_putnbr_fd(i[0], 2);
-    // ft_putstr_fd("col : ", 2);
-    // ft_putnbr_fd(i[1] , 2);
-    //return i;
 }

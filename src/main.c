@@ -12,20 +12,26 @@
 
 # include "ft_select.h"
 
-int					main(int ac, char **av, char **env)
+int					main(int ac, char **av, char **envp)
 {
 	const char		*tname;
 	struct termios 	term;
 	int				fd;
 	t_arg			*arg;
+	t_env			*env;
 //	char		*path;
+	int				p;
+
+	p = 0;
 	(void)ac;
-	(void)env;
-	(void)av;
+	(void)envp;
 	arg = NULL;
 	fd = check_terminal();
-	if (!*av)
+	if (!av[1])
+	{
+		ft_putendl_fd("You should add at least one parameter to ft_select", 2);
 		return (-1);
+	}
 	if ((tname = getenv("TERM")) == NULL)
 		return (-1);
 	if (tgetent(NULL, tname) == -1)
@@ -40,16 +46,21 @@ int					main(int ac, char **av, char **env)
 		return (-1);
 
 	//ft_putendl("YO");
+
+	env = (t_env *)malloc(sizeof(t_env));
+
 	start_new_w();
+	init_env(env, av, fd);
 
     //ft_putnbr_fd(fd, 2);
 	//ft_putendl("YO");
-	init_list(&arg, av, fd);
-	add_argv(arg, fd);
-	//poscur(0, 0);
-	check_key();
-	close(fd);
+	init_list(&arg, av, fd, env);
+	add_argv(arg, fd, env);
 
+	poscur(0, 0);
+	check_key(env, fd);
+	close(fd);
+	free(env);
 	if (tcgetattr(0, &term) == -1)
 		return (-1);
 	term.c_lflag = (ICANON | ECHO);

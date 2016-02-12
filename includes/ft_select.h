@@ -30,10 +30,16 @@ typedef struct 			s_arg{
 		struct s_arg	*next;
 }						t_arg;
 
+typedef struct 			s_env{
+		int				j[2];
+		int				tot;
+		int				wordmax;
+}						t_env;
+
 /*
 **	first.c
 */
-void				check_key(void);
+void				check_key(t_env *env, int fd);
 
 /*
 **	init.c
@@ -42,8 +48,7 @@ int					useless(int c);
 void				start_new_w();
 void				poscur(int x, int y);
 void				init_fd(char *path);
-void				add_argv(t_arg *arg, int fd);
-void				winsize(int fd, int *j);
+void				add_argv(t_arg *arg, int fd, t_env *env);
 
 /*
 ** main.c
@@ -56,8 +61,14 @@ int 				unset_term(struct termios term);
 ** init_list.c
 */
 
-void			init_list(t_arg **argu, char **av, int fd);
+void			init_list(t_arg **argu, char **av, int fd, t_env *env);
 void			addlist(t_arg **argu, char *av, int posx, int posy);
 t_arg			*setmarg(void);
+
+/*
+** init_env.c
+*/
+void			winsize(int fd, int i[2]);
+void			init_env(t_env *env, char **av, int fd);
 
 #endif

@@ -12,33 +12,29 @@
 
 # include "ft_select.h"
 
-void			init_list(t_arg **argu, char **av, int fd)
+void			init_list(t_arg **argu, char **av, int fd, t_env *env)
 {
 	int			i;
-	int			j[2];
-	int			tot;
 	int			margex;
 	int			posx;
 	int			posy;
 
-	tot = 0;
-	winsize(fd, j);
-	i = 1;
-	while (av[i])
-	{
-		i++;
-		tot++;
-	}
-	if (tot > 0)
-		margex = (int)(j[0] / tot);
-	posy = 5;
+	(void)fd;
+	margex = env->j[0];
+
 	posx = 0;
-	// ft_putnbr_fd(j[0], 2);
-	// ft_putnbr_fd(j[1], 2);
+	posy = 1;
 	i = 1;
 	while (av[i])
 	{
-		posx = margex * i;
+		if (margex > i)
+			posx++;
+		else
+		{
+			margex += env->j[0] - 1;
+			posy += 1;
+			posx = 1;
+		}
 		addlist(argu , av[i], posx, posy);
 		i++;
 	}

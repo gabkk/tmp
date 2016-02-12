@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   first.c                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gkuma <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,35 +12,31 @@
 
 # include "ft_select.h"
 
-void		check_key()
+void			winsize(int fd, int i[2])
 {
-	char	*none;
+	struct winsize w;
+	ioctl(fd, TIOCGWINSZ, &w);
 
-	while (1)
-	{
-		char	buff[3];
+	i[0] = w.ws_row;
+	i[1] = w.ws_col;
 
-		read(0 , buff, 3);
-		if (buff[0] == 27)
-		{
-			if (buff[2] == 'A')
-				tputs(tgetstr("up", &none), 1, useless);
-			else if (buff[2] == 'B')
-			{
-				tputs(tgetstr( "do", &none), 1, useless);
-			}
-			else if (buff[2] == 'C')
-				tputs(tgetstr("nd", &none), 1, useless);
-			else if (buff[2] == 'D')
-				tputs(tgetstr("le", &none), 1, useless);	
-		}
-		else if (buff[0] == 4)
-		{
-			ft_putstr("cmd + d");
-			return ;
-		}
-		ft_bzero(buff, 3);
-	}
-	return ;
+
 }
 
+void			init_env(t_env *env, char **av, int fd)
+{
+	int			i;
+
+	i = 0;
+	env->tot = 0;
+	winsize(fd, env->j);
+	i = 1;
+	env->wordmax = ft_strlen(av[1]);
+	while (av[i])
+	{
+		if (ft_strlen(av[i]) > (size_t)env->wordmax)
+			env->wordmax = ft_strlen(av[i]);
+		i++;
+		env->tot++;
+	}
+}
