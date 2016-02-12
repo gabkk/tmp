@@ -38,11 +38,12 @@ void		check_key(t_env *env, int fd)
 				tputs(tgetstr("up", NULL), 1, useless);
 				posy--;
 			}
-			else if (buff[2] == 'B' && (posy < env->j[0] - 1)) //remettre a -1 quand on pourra aller a l element de la colonne suivante
+			else if (buff[2] == 'B' && (posy < env->j[0] - 2)) //remettre a -1 quand on pourra aller a l element de la colonne suivante
 			{
 				tputs(tgetstr( "do", NULL), 1, useless);
 				while (j < margin)
 				{
+					i = 0;
 					while (i < env->wordmax + 2)
 					{
 						tputs(tgetstr("nd", NULL), 1, useless);

@@ -89,9 +89,9 @@ void			add_argv(t_arg *arg, int fd, t_env *env)
 			{
 
 							//ft_putstr_fd("x : ", fd);
-			ft_putnbr_fd(ptr->x, fd);
+			//ft_putnbr_fd(ptr->x, fd);
 			//ft_putstr_fd(" y : ", fd);
-			ft_putnbr_fd(ptr->y, fd);
+			//ft_putnbr_fd(ptr->y, fd);
 
 
 
