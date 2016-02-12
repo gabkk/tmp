@@ -45,14 +45,14 @@ void		init_fd(char *path)
 void			add_argv(t_arg *arg, int fd, t_env *env)
 {
 	t_arg		*ptr;
-	int			x;
+	int			y;
 	// int			y;
 	// //char	*none;
 	int			reachtot;
 	int			size;
 
 	reachtot = 0;
-	x = 1;
+	y = 0;
 	size = 0;
 	// y = 0;
 	(void)env;
@@ -69,10 +69,7 @@ void			add_argv(t_arg *arg, int fd, t_env *env)
 		ptr = arg;
 		while (ptr)
 		{
-			// ft_putstr_fd("x : ", fd);
-			// ft_putnbr_fd(ptr->x, fd);
-			// ft_putstr_fd(" y : ", fd);
-			// ft_putnbr_fd(ptr->y, fd);
+
 
 			/*responsive
 			x = 0;
@@ -88,8 +85,16 @@ void			add_argv(t_arg *arg, int fd, t_env *env)
 				y++;
 			}
 			end responsive*/
-			if (ptr->x == x)
+			if (ptr->y == y)
 			{
+
+							//ft_putstr_fd("x : ", fd);
+			ft_putnbr_fd(ptr->x, fd);
+			//ft_putstr_fd(" y : ", fd);
+			ft_putnbr_fd(ptr->y, fd);
+
+
+
 				size = ft_strlen(ptr->name);
 				if (size < env->wordmax)
 					size = env->wordmax - size + 2;
@@ -105,8 +110,9 @@ void			add_argv(t_arg *arg, int fd, t_env *env)
 			}
 			ptr = ptr->next;
 		}
-		ft_putchar_fd('\n', fd);
-		x++;
+		y++;
+		if (y < env->j[0] - 1)
+			ft_putchar_fd('\n', fd);
 	}
 }
 

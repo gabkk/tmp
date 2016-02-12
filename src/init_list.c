@@ -23,17 +23,17 @@ void			init_list(t_arg **argu, char **av, int fd, t_env *env)
 	margex = env->j[0];
 
 	posx = 0;
-	posy = 1;
+	posy = -1;
 	i = 1;
 	while (av[i])
 	{
 		if (margex > i)
-			posx++;
+			posy++;
 		else
 		{
 			margex += env->j[0] - 1;
-			posy += 1;
-			posx = 1;
+			posx += 1;
+			posy = 0;
 		}
 		addlist(argu , av[i], posx, posy);
 		i++;

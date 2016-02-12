@@ -34,6 +34,8 @@ typedef struct 			s_env{
 		int				j[2];
 		int				tot;
 		int				wordmax;
+		int				cursorx;
+		int				cursory;
 }						t_env;
 
 /*

@@ -23,7 +23,7 @@ void		check_key(t_env *env, int fd)
 
 	margin = 0;
 	posx = 0;
-	posy = 1;
+	posy = 0;
 	while (1)
 	{
 		char	buff[3];
@@ -33,12 +33,12 @@ void		check_key(t_env *env, int fd)
 		read(0 , buff, fd);
 		if (buff[0] == 27)
 		{
-			if (buff[2] == 'A' && (posy > 1))
+			if (buff[2] == 'A' && (posy > 0))
 			{
 				tputs(tgetstr("up", NULL), 1, useless);
 				posy--;
 			}
-			else if (buff[2] == 'B' && (posy < env->j[0]))
+			else if (buff[2] == 'B' && (posy < env->j[0] - 1)) //remettre a -1 quand on pourra aller a l element de la colonne suivante
 			{
 				tputs(tgetstr( "do", NULL), 1, useless);
 				while (j < margin)
@@ -78,7 +78,9 @@ void		check_key(t_env *env, int fd)
 			ft_putstr("cmd + d");
 			return ;
 		}
-
+		// ft_putnbr_fd(posx, fd);
+		// ft_putstr_fd("  ", fd);
+		// ft_putnbr_fd(posy, fd);
 		ft_bzero(buff, 3);
 	}
 	return ;
