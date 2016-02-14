@@ -12,78 +12,150 @@
 
 # include "ft_select.h"
 
-void		check_key(t_env *env, int fd)
+void		check_key(t_env *env, t_arg *arg)
 {
 	//char	*none;
-	int		margin;
-	int		i;
-	int		j;
-	int		posx;
-	int		posy;
+//	int		i;
+//	int		j;
+	t_arg	*ptr;
 
-	margin = 0;
-	posx = 0;
-	posy = 0;
+	ptr = arg;
+	env->cursorx = 0;
+	env->cursory = 0;
 	while (1)
 	{
 		char	buff[3];
 
-		j = 0;
-		i = 0;
-		read(0 , buff, fd);
+//		j = 0;
+//		i = 0;
+		if (!arg)
+		{
+			ft_putendl_fd("Your list is empty", env->fd);
+			exit(0);
+		}
+		read(0 , buff, env->fd);
+		env->prevcursorx = env->cursorx;
+		env->prevcursory = env->cursory;
 		if (buff[0] == 27)
 		{
-			if (buff[2] == 'A' && (posy > 0))
+			ptr->focus = 0;
+			if (buff[2] == 'A')
 			{
-				tputs(tgetstr("up", NULL), 1, useless);
-				posy--;
+				if (ptr && ptr->prev && ptr->index != 1)
+				 	ptr = ptr->prev;
+				else if (ptr)
+					ptr = get_index(env->tot, arg);
 			}
-			else if (buff[2] == 'B' && (posy < env->j[0] - 2)) //remettre a -1 quand on pourra aller a l element de la colonne suivante
+			else if (buff[2] == 'B' ) //remettre a -1 quand on pourra aller a l element de la colonne suivante
 			{
-				tputs(tgetstr( "do", NULL), 1, useless);
-				while (j < margin)
-				{
-					i = 0;
-					while (i < env->wordmax + 2)
-					{
-						tputs(tgetstr("nd", NULL), 1, useless);
-						i++;
-					}
-					j++;
-				}
-				posy++;
+				if (ptr && ptr->next)
+					ptr = ptr->next;
+				else if (ptr)
+					ptr = get_index(1, arg);
 			}
-			else if (buff[2] == 'C')
-			{
-				while (i < env->wordmax + 2)
-				{
-					tputs(tgetstr("nd", NULL), 1, useless);
-					i++;
-				}
-				margin++;
-				posx++;
-			}
-			else if (buff[2] == 'D')
-			{
-				while (i < env->wordmax + 2)
-				{
-					tputs(tgetstr("le", NULL), 1, useless);
-					i++;
-				}
-				margin--;
-				posx--;
-			}
+			ptr->focus = 1;
 		}
-		else if (buff[0] == 4)
+		
+		if (buff[0] == 32) //SPACE
+		{
+			if (ptr->select == 1)
+				ptr->select = 0;
+			else
+				ptr->select = 1;
+		}
+		if (buff[0] == 10) //
+		{
+			if (env->del == 0)
+				env->del = 1;
+		}
+		if (buff[0] == 4)
 		{
 			ft_putstr("cmd + d");
 			return ;
 		}
-		// ft_putnbr_fd(posx, fd);
-		// ft_putstr_fd("  ", fd);
-		// ft_putnbr_fd(posy, fd);
+		redraw(arg, ptr, env);
 		ft_bzero(buff, 3);
 	}
 	return ;
 }
+
+void		redraw(t_arg *arg, t_arg *ptr, t_env *env)
+{
+	char	*CD;
+
+	poscur(0, 0);
+	if ((CD = tgetstr("cd", NULL)) == NULL)
+	CD = tgetstr("cl", NULL);
+	tputs(CD, 1, useless);
+	add_argv(arg, env);
+	//if (next_element(arg, ptr, env) == 1)
+		next_element(arg, ptr, env);
+		poscur(env->cursorx, env->cursory);
+	// else
+	// {
+	// 	poscur(env->prevcursorx, env->prevcursory);
+	// 	env->cursorx = env->prevcursorx;
+	// 	env->cursory = env->prevcursory;
+	// }
+}
+
+void			next_element(t_arg *arg, t_arg *next, t_env *env)
+{
+	// t_arg	*ptr;
+	(void)arg;
+	// ptr = arg;
+	// while (ptr)
+	// {
+	// 	if ((next->y == ptr->y) && (next->x == ptr->x))
+	// 	{
+			env->cursory = next->y;
+			env->cursorx = next->x;
+	// 		return (1);
+	// 	}
+	// 	ptr = ptr->next;
+	// }
+	// return (0);
+}
+
+t_arg			*get_index(int index, t_arg *arg)
+{
+	t_arg		*ptr;
+
+	ptr = arg;
+	while (ptr)
+	{
+		if (ptr->index == index)
+			return (ptr);
+		ptr = ptr->next;
+	}
+	return (NULL);
+}
+
+
+
+
+
+
+
+
+/*
+
+			else if (buff[2] == 'C')
+			{
+//				while (i < env->wordmax + 2)
+//				{
+					env->cursory += env->wordmax + 2;
+//					i++;
+//				}
+			}
+			else if (buff[2] == 'D' && (env->cursory > 0))
+			{
+//				while (i < env->wordmax + 2)
+//				{
+					env->cursory -= env->wordmax + 2;
+//					i++;
+//				}
+			}
+
+*/
 

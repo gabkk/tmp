@@ -23,13 +23,14 @@ void			winsize(int fd, int i[2])
 
 }
 
-void			init_env(t_env *env, char **av, int fd)
+void			init_env(t_env *env, char **av)
 {
 	int			i;
 
 	i = 0;
+	env->del = 0;
 	env->tot = 0;
-	winsize(fd, env->j);
+	winsize(env->fd, env->j);
 	i = 1;
 	env->wordmax = ft_strlen(av[1]);
 	while (av[i])

@@ -16,17 +16,17 @@ int					main(int ac, char **av, char **envp)
 {
 	const char		*tname;
 	struct termios 	term;
-	int				fd;
 	t_arg			*arg;
 	t_env			*env;
 //	char		*path;
-	int				p;
+//	int				p;
 
-	p = 0;
+//	p = 0;
 	(void)ac;
 	(void)envp;
 	arg = NULL;
-	fd = check_terminal();
+	env = (t_env *)malloc(sizeof(t_env));
+	check_terminal(env);
 	if (!av[1])
 	{
 		ft_putendl_fd("You should add at least one parameter to ft_select", 2);
@@ -45,21 +45,21 @@ int					main(int ac, char **av, char **envp)
 	if (tcsetattr(0, TCSADRAIN, &term) == -1)
 		return (-1);
 
-	//ft_putendl("YO");
-
-	env = (t_env *)malloc(sizeof(t_env));
 
 	start_new_w();
-	init_env(env, av, fd);
+	init_env(env, av);
 
-    //ft_putnbr_fd(fd, 2);
-	//ft_putendl("YO");
-	init_list(&arg, av, fd, env);
-	add_argv(arg, fd, env);
 
+	init_list(&arg, av, env);
+	add_argv(arg, env);
 	poscur(0, 0);
-	check_key(env, fd);
-	close(fd);
+	check_key(env, arg);
+
+
+
+
+
+	close(env->fd);
 	free(env);
 	if (tcgetattr(0, &term) == -1)
 		return (-1);
@@ -69,15 +69,14 @@ int					main(int ac, char **av, char **envp)
 	return (0);
 }
 
-int		check_terminal()
+void		check_terminal(t_env *env)
 {
-	int		fildes;
+//	int		fildes;
 	char	*name;
-	int 	slot;
-	int		fd;
+//	int 	slot;
 
-	slot = 0;
-	fildes = 0;
+//	slot = 0;
+//	fildes = 0;
 
 	/*              WTF IS THAT */
 
@@ -87,10 +86,8 @@ int		check_terminal()
 		ft_putendl_fd("fd incorrect", 2);
 		exit(EXIT_FAILURE);
 	}
-	fd = open(name, O_RDWR);
-	if(!(isatty(fd)))
+	env->fd = open(name, O_RDWR);
+	if(!(isatty(env->fd)))
 		exit(EXIT_FAILURE);
-	slot = ttyslot();
-	//ft_putnbr(ioctl(fd, 0));
-	return (fd);
+//	slot = ttyslot();
 }
