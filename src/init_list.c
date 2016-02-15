@@ -32,6 +32,7 @@ void			addlist(t_arg **argu, char *av, int posx, int posy, int i)
 		newm->focus = 1;
 //		first = newm;
 //		first->next = *argu;
+		return;
 	}
 	ptr = *argu;
 	while (ptr->next)
@@ -57,6 +58,7 @@ t_arg			*setmarg(int posx, int posy, char *av)
 	newm->x = posx;
 	newm->y = posy;
 	newm->focus = 0;
+	newm->select = 0;
 	newm->next = NULL;
 	newm->prev = NULL;
 	return (newm);
@@ -89,31 +91,56 @@ void			init_list(t_arg **argu, char **av, t_env *env)
 	}
 }
 
-void			del_list(t_arg *arg, t_env *env)
+void			del_list(t_arg **arg, t_env *env)
 {
 	t_arg		*ptr;
+//	t_arg		*tmp;
 
-	ptr = arg;
+	if (!(*arg))
+	{
+		ft_putendl_fd("Your list is empty", env->fd);
+		exit(0);
+	}
+	ptr = *arg;
 	while (ptr)
 	{
 		if (ptr->select == 1)
 		{
-			if (!(ptr->prev))
+// 			if (!(ptr->prev) && !(ptr->next))
+// 			{
+// //				free(ptr);
+// 		ft_putendl_fd("Yy", env->fd);
+			
+// 				exit(0);
+// 			}
+			if (ptr->next && ptr->prev)
 			{
-				arg = ptr->next;
-			}
-			else if (!(ptr->next))
-			{
-				ptr->prev->next = NULL;
-			}
-			else
-			{
+				ft_putendl_fd("Your list is", env->fd);
 				ptr->prev->next = ptr->next;
 				ptr->next->prev = ptr->prev;
+				free(ptr);
+				ptr = *arg;
+				del_list(&ptr, env);
 			}
-			env->tot -= 1;
-			del_list(arg, env);
-			free(ptr);
+			else if (!ptr->prev)
+			{
+				ft_putendl_fd("Your", env->fd);
+				// tmp = ptr->next;
+				// free(ptr);
+				// tmp->prev = NULL;
+				// *arg = tmp;
+				// del_list(arg, env);
+			 	*arg = ptr->next;
+			 }
+			else if (!ptr->next)
+			{
+				ft_putendl_fd("Your list", env->fd);
+				ptr->prev->next = NULL;
+				free(ptr);
+			}
+			if (!ptr)
+				exit(0);
+			//free(ptr);
 		}
 		ptr = ptr->next;
 	}
@@ -124,21 +151,38 @@ void			init_index(t_arg *arg, t_env *env)
 	t_arg		*ptr;
 	int			i;
 	int			margex;
+	int			x;
+	int			y;
 
 	i = 1;
 	margex = env->j[0];
 	ptr = arg;
-	ptr->y = 0;
-	ptr->x = -1;
+	y = 0;
+	x = -1;
+	env->tot = 0;
+	env->wordmax = 0;
+	while (ptr)
+	{
+		if (ft_strlen(ptr->name) > (size_t)env->wordmax)
+			env->wordmax = ft_strlen(ptr->name);
+		env->tot++;
+		ptr = ptr->next;
+	}
+
+	ptr = arg;
 	while (ptr)
 	{
 		if (margex > i)
-			ptr->x++;
+		{
+			x++;
+			ptr->x = x;
+		}
 		else
 		{
 			margex += env->j[0] - 1;
-			ptr->y += env->wordmax + 2;
-			ptr->x = 0;
+			y += env->wordmax + 2;
+			ptr->y = y;
+			x = -1;
 		}
 		ptr->index = i;
 		i++;

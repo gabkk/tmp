@@ -28,11 +28,6 @@ void		check_key(t_env *env, t_arg *arg)
 
 //		j = 0;
 //		i = 0;
-		if (!arg)
-		{
-			ft_putendl_fd("Your list is empty", env->fd);
-			exit(0);
-		}
 		read(0 , buff, env->fd);
 		env->prevcursorx = env->cursorx;
 		env->prevcursory = env->cursory;

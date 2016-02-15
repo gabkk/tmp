@@ -35,13 +35,19 @@ void			add_argv(t_arg *arg, t_env *env)
 
 	reachtot = 0;
 	x = 0;
-	// size = 0;
-	// if (env->del == 1)
-	// {
-	// 	del_list(arg, env);
-	// 	init_index(arg, env);
-	// 	env->del = 0;
-	// }
+	size = 0;
+
+	if (env->del == 1)
+	{
+		del_list(&arg, env);
+		init_index(arg, env);
+		env->del = 0;
+	}
+	if (env->tot < 1)
+	{
+		ft_putendl_fd("Your list is empty", env->fd);
+		exit(0);
+	}
 			// ft_putstr_fd("x : ", env->fd);
 			// ft_putnbr_fd(env->j[0], env->fd);
 			// ft_putstr_fd(" y : ", env->fd);
@@ -54,9 +60,10 @@ void			add_argv(t_arg *arg, t_env *env)
 			if (ptr->x == x)
 			{
 			// ft_putstr_fd("x : ", env->fd);
-//			ft_putnbr_fd(ptr->x, env->fd);
+			ft_putnbr_fd(ptr->x, env->fd);
 			// ft_putstr_fd(" y : ", env->fd);
-//			ft_putnbr_fd(ptr->y, env->fd);
+
+			ft_putnbr_fd(ptr->y, env->fd);
 				size = ft_strlen(ptr->name);
 				if (size < env->wordmax)
 					size = env->wordmax - size + 2;

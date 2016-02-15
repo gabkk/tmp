@@ -87,7 +87,7 @@ int 				unset_term(struct termios term);
 void				init_list(t_arg **argu, char **av, t_env *env);
 void				addlist(t_arg **argu, char *av, int posx, int posy, int i);
 t_arg				*setmarg(int x, int y, char *av);
-void				del_list(t_arg *arg, t_env *env);
+void				del_list(t_arg **arg, t_env *env);
 
 /*
 ** init_env.c

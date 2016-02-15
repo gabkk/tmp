@@ -38,10 +38,8 @@ norme:
 
 clean:
 	rm -rf $(OBJ)
-	make clean -C libft
 
 fclean: clean
 	rm -rf $(NAME)
-	make fclean -C libft
 
 re: fclean all
