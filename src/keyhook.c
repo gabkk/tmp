@@ -12,19 +12,19 @@
 
 # include "ft_select.h"
 
-void		check_key(t_env *env, t_arg *arg)
+void		check_key(t_env *env, t_arg **arg)
 {
 	//char	*none;
 //	int		i;
 //	int		j;
 	t_arg	*ptr;
 
-	ptr = arg;
+	ptr = *arg;
 	env->cursorx = 0;
 	env->cursory = 0;
 	while (1)
 	{
-		char	buff[3];
+		char	buff[4];
 
 //		j = 0;
 //		i = 0;
@@ -39,14 +39,14 @@ void		check_key(t_env *env, t_arg *arg)
 				if (ptr && ptr->prev && ptr->index != 1)
 				 	ptr = ptr->prev;
 				else if (ptr)
-					ptr = get_index(env->tot, arg);
+					ptr = get_index(env->tot, *arg);
 			}
 			else if (buff[2] == 'B' ) //remettre a -1 quand on pourra aller a l element de la colonne suivante
 			{
 				if (ptr && ptr->next)
 					ptr = ptr->next;
 				else if (ptr)
-					ptr = get_index(1, arg);
+					ptr = get_index(1, *arg);
 			}
 			ptr->focus = 1;
 		}
@@ -56,13 +56,33 @@ void		check_key(t_env *env, t_arg *arg)
 			if (ptr->select == 1)
 				ptr->select = 0;
 			else
+			{
 				ptr->select = 1;
+				ptr->focus = 0;
+				if (!ptr->next)
+				{
+					ptr = get_index(1, *arg);
+					ptr->focus = 1;
+					env->cursorx = ptr->x;
+					env->cursory = ptr->y;
+					poscur(ptr->x, ptr->y);
+				}
+				else if (ptr->next)
+				{
+					ptr->next->focus = 1;
+					env->cursorx = ptr->next->x;
+					env->cursory = ptr->next->y;
+					ptr = ptr->next;
+					poscur(ptr->x, ptr->y);
+				}
+			}
 		}
-		if (buff[0] == 10) //
+		if (buff[0] == 127) //
 		{
 			if (env->del == 0)
 				env->del = 1;
 		}
+		if (buff[0] == 27 && buff[2] == '3' && buff[3] == '~')
 		if (buff[0] == 4)
 		{
 			ft_putstr("cmd + d");
@@ -74,7 +94,7 @@ void		check_key(t_env *env, t_arg *arg)
 	return ;
 }
 
-void		redraw(t_arg *arg, t_arg *ptr, t_env *env)
+void		redraw(t_arg **arg, t_arg *ptr, t_env *env)
 {
 	char	*CD;
 
@@ -82,10 +102,10 @@ void		redraw(t_arg *arg, t_arg *ptr, t_env *env)
 	if ((CD = tgetstr("cd", NULL)) == NULL)
 	CD = tgetstr("cl", NULL);
 	tputs(CD, 1, useless);
-	add_argv(arg, env);
+	draw_argv(arg, env);
 	//if (next_element(arg, ptr, env) == 1)
-		next_element(arg, ptr, env);
-		poscur(env->cursorx, env->cursory);
+	next_element(*arg, ptr, env);
+	poscur(env->cursorx, env->cursory);
 	// else
 	// {
 	// 	poscur(env->prevcursorx, env->prevcursory);
@@ -94,7 +114,7 @@ void		redraw(t_arg *arg, t_arg *ptr, t_env *env)
 	// }
 }
 
-void			next_element(t_arg *arg, t_arg *next, t_env *env)
+void			next_element(t_arg *arg, t_arg *ptr, t_env *env)
 {
 	// t_arg	*ptr;
 	(void)arg;
@@ -103,8 +123,8 @@ void			next_element(t_arg *arg, t_arg *next, t_env *env)
 	// {
 	// 	if ((next->y == ptr->y) && (next->x == ptr->x))
 	// 	{
-			env->cursory = next->y;
-			env->cursorx = next->x;
+			env->cursory = ptr->y;
+			env->cursorx = ptr->x;
 	// 		return (1);
 	// 	}
 	// 	ptr = ptr->next;

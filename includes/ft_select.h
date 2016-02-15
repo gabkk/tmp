@@ -57,9 +57,9 @@ typedef struct 			s_env{
 /*
 **	keyhook.c
 */
-void				check_key(t_env *env, t_arg *arg);
-void				redraw(t_arg *arg, t_arg *ptr, t_env *env);
-void				next_element(t_arg *arg, t_arg *next, t_env *env);
+void				check_key(t_env *env, t_arg **arg);
+void				redraw(t_arg **arg, t_arg *ptr, t_env *env);
+void				next_element(t_arg *arg, t_arg *ptr, t_env *env);
 t_arg				*get_index(int index, t_arg *arg);
 
 /*
@@ -69,9 +69,9 @@ int					useless(int c);
 void				start_new_w();
 void				poscur(int x, int y);
 void				init_fd(char *path);
-void				add_argv(t_arg *arg, t_env *env);
+void				draw_argv(t_arg **arg, t_env *env);
 void				balise_ptr(t_arg *ptr, t_env *env);
-void				init_index(t_arg *arg, t_env *env);
+void				init_index(t_arg **arg, t_env *env);
 
 /*
 ** main.c

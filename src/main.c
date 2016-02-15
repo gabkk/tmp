@@ -51,9 +51,9 @@ int					main(int ac, char **av, char **envp)
 
 
 	init_list(&arg, av, env);
-	add_argv(arg, env);
+	draw_argv(&arg, env);
 	poscur(0, 0);
-	check_key(env, arg);
+	check_key(env, &arg);
 
 
 

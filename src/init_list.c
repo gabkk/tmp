@@ -30,6 +30,7 @@ void			addlist(t_arg **argu, char *av, int posx, int posy, int i)
 		newm->prev = NULL;
 		newm->index = i;
 		newm->focus = 1;
+		newm->select = 0;
 //		first = newm;
 //		first->next = *argu;
 		return;
@@ -42,6 +43,7 @@ void			addlist(t_arg **argu, char *av, int posx, int posy, int i)
 	newm->name = av;
 	newm->x = posx;
 	newm->y = posy;
+	newm->select = 0;
 	newm->index = i;
 	newm->next = NULL;
 }
@@ -94,7 +96,7 @@ void			init_list(t_arg **argu, char **av, t_env *env)
 void			del_list(t_arg **arg, t_env *env)
 {
 	t_arg		*ptr;
-//	t_arg		*tmp;
+	t_arg		*tmp;
 
 	if (!(*arg))
 	{
@@ -113,40 +115,41 @@ void			del_list(t_arg **arg, t_env *env)
 			
 // 				exit(0);
 // 			}
+			if (!ptr->next && ! ptr->prev)
+			{
+				free(ptr);
+				exit(0);
+			}
 			if (ptr->next && ptr->prev)
 			{
-				ft_putendl_fd("Your list is", env->fd);
 				ptr->prev->next = ptr->next;
 				ptr->next->prev = ptr->prev;
 				free(ptr);
-				ptr = *arg;
-				del_list(&ptr, env);
+				// ptr = *arg;
+				// del_list(&ptr, env);
 			}
 			else if (!ptr->prev)
 			{
-				ft_putendl_fd("Your", env->fd);
-				// tmp = ptr->next;
-				// free(ptr);
+				tmp = ptr->next;
+				free(ptr);
+				tmp->prev = NULL;
+				*arg = tmp;
 				// tmp->prev = NULL;
-				// *arg = tmp;
-				// del_list(arg, env);
-			 	*arg = ptr->next;
+				//*arg = tmp;
+				//del_list(arg, env);
 			 }
 			else if (!ptr->next)
 			{
-				ft_putendl_fd("Your list", env->fd);
 				ptr->prev->next = NULL;
 				free(ptr);
 			}
-			if (!ptr)
-				exit(0);
 			//free(ptr);
 		}
 		ptr = ptr->next;
 	}
 }
 
-void			init_index(t_arg *arg, t_env *env)
+void			init_index(t_arg **arg, t_env *env)
 {
 	t_arg		*ptr;
 	int			i;
@@ -156,11 +159,13 @@ void			init_index(t_arg *arg, t_env *env)
 
 	i = 1;
 	margex = env->j[0];
-	ptr = arg;
+	ptr = *arg;
 	y = 0;
 	x = -1;
 	env->tot = 0;
 	env->wordmax = 0;
+	if (!*arg)
+		exit(0);
 	while (ptr)
 	{
 		if (ft_strlen(ptr->name) > (size_t)env->wordmax)
@@ -169,20 +174,22 @@ void			init_index(t_arg *arg, t_env *env)
 		ptr = ptr->next;
 	}
 
-	ptr = arg;
+	ptr = *arg;
 	while (ptr)
 	{
-		if (margex > i)
+		if (i < margex)
 		{
 			x++;
 			ptr->x = x;
+			ptr->y = y;
 		}
 		else
 		{
 			margex += env->j[0] - 1;
 			y += env->wordmax + 2;
 			ptr->y = y;
-			x = -1;
+			ptr->x = 0;
+			x = 0;
 		}
 		ptr->index = i;
 		i++;

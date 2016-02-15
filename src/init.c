@@ -26,7 +26,7 @@ void		start_new_w()
 	tputs(CD, 1, useless);
 }
 
-void			add_argv(t_arg *arg, t_env *env)
+void			draw_argv(t_arg **arg, t_env *env)
 {
 	t_arg		*ptr;
 	int			x;
@@ -39,7 +39,7 @@ void			add_argv(t_arg *arg, t_env *env)
 
 	if (env->del == 1)
 	{
-		del_list(&arg, env);
+		del_list(arg, env);
 		init_index(arg, env);
 		env->del = 0;
 	}
@@ -54,16 +54,18 @@ void			add_argv(t_arg *arg, t_env *env)
 			// ft_putnbr_fd(env->j[1], env->fd);
 	while (reachtot < env->tot)
 	{
-		ptr = arg;
+		ptr = *arg;
 		while (ptr)
 		{
 			if (ptr->x == x)
 			{
 			// ft_putstr_fd("x : ", env->fd);
-			ft_putnbr_fd(ptr->x, env->fd);
+			//ft_putnbr_fd(ptr->index, env->fd);
+			//ft_putnbr_fd(ptr->x, env->fd);
+			//ft_putnbr_fd(ptr->y, env->fd);
 			// ft_putstr_fd(" y : ", env->fd);
 
-			ft_putnbr_fd(ptr->y, env->fd);
+			//ft_putnbr_fd(ptr->y, env->fd);
 				size = ft_strlen(ptr->name);
 				if (size < env->wordmax)
 					size = env->wordmax - size + 2;
@@ -83,6 +85,8 @@ void			add_argv(t_arg *arg, t_env *env)
 		if (x < env->j[0] - 1)
 			ft_putchar_fd('\n', env->fd);
 	}
+//	ft_putnbr_fd(env->tot, env->fd);
+//	ft_putnbr_fd(env->j[0], env->fd);
 }
 
 			/*responsive
