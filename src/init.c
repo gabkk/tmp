@@ -12,18 +12,21 @@
 
 # include "ft_select.h"
 
-void		start_new_w()
+void		start_new_w(t_env *env)
 {
-	char	*path;
+//	char	*path;
 	char	*CD;
+	char	*ti;
 
-	path = tgetstr("is", NULL);//init term
-	if (path)
-		tputs(path, 1, useless);
-	poscur(0, 0); // positionne cursor
+	if((ti = tgetstr("ti", NULL)))
+	 	tputs(ti, env->fd, useless);
+	// path = tgetstr("is", NULL);//init term
+	// if (path)
+	// 	tputs(path, 1, useless);
+	poscur(0, 0, env); // positionne cursor
 	if ((CD = tgetstr("cd", NULL)) == NULL) //clear from the cursor to the end of the screen
 		CD = tgetstr("cl", NULL);
-	tputs(CD, 1, useless);
+	tputs(CD, env->fd, useless);
 }
 
 void			draw_argv(t_arg **arg, t_env *env)
@@ -104,18 +107,34 @@ void			draw_argv(t_arg **arg, t_env *env)
 			}
 			end responsive*/
 
-void		poscur(int x, int y)
+void		poscur(int x, int y, t_env *env)
 {
 	char	*CM;
 
 	CM = tgetstr("cm", NULL);
-	tputs(tgoto(CM, y , x), 1, useless);
+	tputs(tgoto(CM, y , x), env->fd, useless);
 }
 
 int			useless(int c)
 {
-	write( 1, &c, 1);
+	write( 3, &c, 1);
 	return (0);
+}
+
+int			check_wsize(t_env *env)
+{
+	// int		totalw;
+	// int		totaldraw;
+	int		draw;
+
+	draw = 1;
+	// totalw = env->j[0] * env->j[1];
+	// totaldraw = (env->tot + 1) * (env->wordmax + 4);
+	// // if (totaldraw > totalw)
+	// // 	draw = 0;
+	if (env->j[1] < (env->ymax + env->wordmax + 2))
+		draw = 0;
+	return (draw);
 }
 
 void		balise_ptr(t_arg *ptr, t_env *env)

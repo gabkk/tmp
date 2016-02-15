@@ -50,9 +50,10 @@ typedef struct 			s_env{
 		int				prevcursory;
 		int				fd;
 		int				del;
+		int				ymax;
 }						t_env;
 
-
+int						g_flagsignal;
 
 /*
 **	keyhook.c
@@ -66,13 +67,14 @@ t_arg				*get_index(int index, t_arg *arg);
 **	init.c
 */
 int					useless(int c);
-void				start_new_w();
-void				poscur(int x, int y);
+int					uselesse(int c);
+void				start_new_w(t_env *env);
+void				poscur(int x, int y, t_env *env);
 void				init_fd(char *path);
 void				draw_argv(t_arg **arg, t_env *env);
 void				balise_ptr(t_arg *ptr, t_env *env);
 void				init_index(t_arg **arg, t_env *env);
-
+int					check_wsize(t_env *env);
 /*
 ** main.c
 */
@@ -94,5 +96,6 @@ void				del_list(t_arg **arg, t_env *env);
 */
 void				winsize(int fd, int i[2]);
 void				init_env(t_env *env, char **av);
+void				sig_handler(int signo);
 
 #endif

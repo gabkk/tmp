@@ -28,16 +28,35 @@ void			init_env(t_env *env, char **av)
 	int			i;
 
 	i = 0;
-	env->del = 0;
-	env->tot = 0;
 	winsize(env->fd, env->j);
 	i = 1;
-	env->wordmax = ft_strlen(av[1]);
+	env->ymax = 0;
+	env->wordmax = 0;
+	if (!*av)
+		return ;
 	while (av[i])
 	{
 		if (ft_strlen(av[i]) > (size_t)env->wordmax)
 			env->wordmax = ft_strlen(av[i]);
 		i++;
 		env->tot++;
+	}
+}
+
+void			sig_handler(int signo)
+{
+	if (signo == SIGWINCH)
+	{
+
+		g_flagsignal = 1;
+
+		//exit(0);
+		// if (g_flagsignal != 0)
+		// {
+		// 	kill(g_flagsignal, SIGKILL);
+		// 	write(1, "\n", 1);
+		// 	g_flagsignal = 0;
+		// }
+		return ;
 	}
 }

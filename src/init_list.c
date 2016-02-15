@@ -30,7 +30,6 @@ void			addlist(t_arg **argu, char *av, int posx, int posy, int i)
 		newm->prev = NULL;
 		newm->index = i;
 		newm->focus = 1;
-		newm->select = 0;
 //		first = newm;
 //		first->next = *argu;
 		return;
@@ -43,7 +42,6 @@ void			addlist(t_arg **argu, char *av, int posx, int posy, int i)
 	newm->name = av;
 	newm->x = posx;
 	newm->y = posy;
-	newm->select = 0;
 	newm->index = i;
 	newm->next = NULL;
 }
@@ -86,6 +84,8 @@ void			init_list(t_arg **argu, char **av, t_env *env)
 		{
 			margex += env->j[0] - 1;
 			posy += env->wordmax + 2;
+			if (env->ymax < posy)
+				env->ymax = posy;
 			posx = 0;
 		}
 		addlist(argu , av[i], posx, posy, i);
@@ -187,6 +187,8 @@ void			init_index(t_arg **arg, t_env *env)
 		{
 			margex += env->j[0] - 1;
 			y += env->wordmax + 2;
+			if (env->ymax < y)
+				env->ymax = y;
 			ptr->y = y;
 			ptr->x = 0;
 			x = 0;

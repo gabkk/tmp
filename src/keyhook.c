@@ -18,6 +18,9 @@ void		check_key(t_env *env, t_arg **arg)
 //	int		i;
 //	int		j;
 	t_arg	*ptr;
+	int		draw;
+
+	char	*CD;
 
 	ptr = *arg;
 	env->cursorx = 0;
@@ -28,7 +31,33 @@ void		check_key(t_env *env, t_arg **arg)
 
 //		j = 0;
 //		i = 0;
-		read(0 , buff, env->fd);
+		env->ymax = 0;
+		if (g_flagsignal == 1)
+		{
+			tputs(tgetstr("bl", NULL), env->fd, useless);
+
+		//	init_env(env, NULL);
+			winsize(env->fd, env->j);
+			init_index(arg, env);
+			draw = check_wsize(env);
+
+
+			if (draw == 1)
+				redraw(arg, ptr, env);
+			else
+			{
+				poscur(0, 0, env);
+				if ((CD = tgetstr("cd", NULL)) == NULL)
+					CD = tgetstr("cl", NULL);
+				tputs(CD, env->fd, useless);
+				ft_putstr_fd("Your terminal is too smallqqq", env->fd);
+			}
+			g_flagsignal = 0;
+			//ft_putnbr_fd(ptr->x, env->fd);
+			//ft_putnbr_fd(ptr->y, env->fd);
+		}
+
+		read(env->fd , buff, 5);
 		env->prevcursorx = env->cursorx;
 		env->prevcursory = env->cursory;
 		if (buff[0] == 27)
@@ -48,47 +77,101 @@ void		check_key(t_env *env, t_arg **arg)
 				else if (ptr)
 					ptr = get_index(1, *arg);
 			}
+			else if (!buff[2])
+				exit(0);
 			ptr->focus = 1;
 		}
 		
 		if (buff[0] == 32) //SPACE
 		{
 			if (ptr->select == 1)
+			{
 				ptr->select = 0;
+				ptr->focus = 0;
+			}
 			else
 			{
 				ptr->select = 1;
 				ptr->focus = 0;
-				if (!ptr->next)
-				{
-					ptr = get_index(1, *arg);
-					ptr->focus = 1;
-					env->cursorx = ptr->x;
-					env->cursory = ptr->y;
-					poscur(ptr->x, ptr->y);
-				}
-				else if (ptr->next)
-				{
-					ptr->next->focus = 1;
-					env->cursorx = ptr->next->x;
-					env->cursory = ptr->next->y;
-					ptr = ptr->next;
-					poscur(ptr->x, ptr->y);
-				}
+			}
+			if (!ptr->next)
+			{
+				ptr = get_index(1, *arg);
+				ptr->focus = 1;
+				env->cursorx = ptr->x;
+				env->cursory = ptr->y;
+				poscur(ptr->x, ptr->y, env);
+			}
+			else if (ptr->next)
+			{
+				ptr->next->focus = 1;
+				env->cursorx = ptr->next->x;
+				env->cursory = ptr->next->y;
+				ptr = ptr->next;
+				poscur(ptr->x, ptr->y, env);
 			}
 		}
-		if (buff[0] == 127) //
+		if (buff[0] == 127 || (buff[0] == 27 && buff[2] == '3')) //
 		{
 			if (env->del == 0)
 				env->del = 1;
 		}
-		if (buff[0] == 27 && buff[2] == '3' && buff[3] == '~')
+
+		if (buff[0] == '\n')
+		{
+
+
+			tputs(tgetstr("te", NULL), env->fd, useless);
+			// tputs(tgoto(tgetstr("cm", NULL), 0 , 0), 1, useless);
+	//		tputs(tgetstr("nw", NULL), env->fd, useless);
+
+
+
+			//tputs(tgetstr("nw", NULL), 1, useless);
+
+	//		ft_putstr_fd("awe", 1);
+			tputs(tgetstr("it", NULL), env->fd, useless);
+
+			ptr = *arg;
+			while (ptr)
+			{
+				if (ptr->select == 1)
+				{
+					//ft_putchar(' ');
+					ft_putstr_fd(ptr->name, 1);
+					ft_putchar_fd(' ', 1);
+					//exit(0);
+				}
+				ptr = ptr->next;
+			}
+
+
+//			ft_putstr("ok");
+
+
+			return;
+//			return ;
+			//exit(0);
+		}
 		if (buff[0] == 4)
 		{
 			ft_putstr("cmd + d");
 			return ;
 		}
-		redraw(arg, ptr, env);
+		if (buff[0])
+		{
+			draw = check_wsize(env);
+			if (draw == 1)
+				redraw(arg, ptr, env);
+			else
+			{
+				poscur(0, 0, env);
+				if ((CD = tgetstr("cd", NULL)) == NULL)
+					CD = tgetstr("cl", NULL);
+				tputs(CD, env->fd, useless);
+				ft_putstr_fd("Your terminal is too small", env->fd);
+			}
+		}
 		ft_bzero(buff, 3);
 	}
 	return ;
@@ -98,14 +181,16 @@ void		redraw(t_arg **arg, t_arg *ptr, t_env *env)
 {
 	char	*CD;
 
-	poscur(0, 0);
+	//tputs(tgetstr("bl", NULL), env->fd, useless);
+
+	poscur(0, 0, env);
 	if ((CD = tgetstr("cd", NULL)) == NULL)
 	CD = tgetstr("cl", NULL);
-	tputs(CD, 1, useless);
+	tputs(CD, env->fd, useless);
 	draw_argv(arg, env);
 	//if (next_element(arg, ptr, env) == 1)
 	next_element(*arg, ptr, env);
-	poscur(env->cursorx, env->cursory);
+	poscur(env->cursorx, env->cursory, env);
 	// else
 	// {
 	// 	poscur(env->prevcursorx, env->prevcursory);
@@ -145,32 +230,4 @@ t_arg			*get_index(int index, t_arg *arg)
 	}
 	return (NULL);
 }
-
-
-
-
-
-
-
-
-/*
-
-			else if (buff[2] == 'C')
-			{
-//				while (i < env->wordmax + 2)
-//				{
-					env->cursory += env->wordmax + 2;
-//					i++;
-//				}
-			}
-			else if (buff[2] == 'D' && (env->cursory > 0))
-			{
-//				while (i < env->wordmax + 2)
-//				{
-					env->cursory -= env->wordmax + 2;
-//					i++;
-//				}
-			}
-
-*/
 
