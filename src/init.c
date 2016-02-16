@@ -19,14 +19,14 @@ void		start_new_w(t_env *env)
 	char	*ti;
 
 	if((ti = tgetstr("ti", NULL)))
-	 	tputs(ti, env->fd, useless);
+	 	tputs(ti, 1, useless);
 	// path = tgetstr("is", NULL);//init term
 	// if (path)
 	// 	tputs(path, 1, useless);
 	poscur(0, 0, env); // positionne cursor
 	if ((CD = tgetstr("cd", NULL)) == NULL) //clear from the cursor to the end of the screen
 		CD = tgetstr("cl", NULL);
-	tputs(CD, env->fd, useless);
+	tputs(CD, 1, useless);
 }
 
 void			draw_argv(t_arg **arg, t_env *env)
@@ -111,13 +111,20 @@ void		poscur(int x, int y, t_env *env)
 {
 	char	*CM;
 
+	(void)env;
 	CM = tgetstr("cm", NULL);
-	tputs(tgoto(CM, y , x), env->fd, useless);
+	tputs(tgoto(CM, y , x), 1, useless);
 }
 
 int			useless(int c)
 {
-	write( 3, &c, 1);
+	write( g_fd, &c, 1);
+	return (0);
+}
+
+int			uselesse(int c)
+{
+	write( 1, &c, 1);
 	return (0);
 }
 
@@ -149,4 +156,28 @@ void		balise_ptr(t_arg *ptr, t_env *env)
 	if (ptr->select == 1)
 		ft_putstr_fd(ANSI_COLOR_RESET_REV, env->fd);
 
+}
+
+void		exit_fct(t_env *env)
+{
+	struct termios 	term;
+
+	tgetent(NULL, getenv("TERM"));
+	(void)env;
+	poscur(0, 0, env);
+	tputs(tgetstr("te", NULL), 1, useless);
+
+
+	close(g_fd);
+	//free(env); // free tt dans env
+
+	//tputs(tgetstr("it", NULL), 1, useless);
+	if (tcgetattr(0, &term) == -1)
+		return ;
+	term.c_lflag = g_canon;
+	term.c_lflag = g_echo;
+	term.c_cc[VMIN] = g_vim;
+	term.c_cc[VTIME] = g_tim;
+	if (tcsetattr(0, 0, &term) == -1)
+		return ;
 }

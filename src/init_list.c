@@ -100,7 +100,7 @@ void			del_list(t_arg **arg, t_env *env)
 
 	if (!(*arg))
 	{
-		ft_putendl_fd("Your list is empty", env->fd);
+		exit_fct(env);
 		exit(0);
 	}
 	ptr = *arg;
@@ -118,6 +118,7 @@ void			del_list(t_arg **arg, t_env *env)
 			if (!ptr->next && ! ptr->prev)
 			{
 				free(ptr);
+				exit_fct(env);
 				exit(0);
 			}
 			if (ptr->next && ptr->prev)
@@ -147,6 +148,8 @@ void			del_list(t_arg **arg, t_env *env)
 		}
 		ptr = ptr->next;
 	}
+	env->cursorx = (*arg)->x;
+	env->cursory = (*arg)->y;
 }
 
 void			init_index(t_arg **arg, t_env *env)

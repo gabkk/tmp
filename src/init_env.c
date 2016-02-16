@@ -43,20 +43,4 @@ void			init_env(t_env *env, char **av)
 	}
 }
 
-void			sig_handler(int signo)
-{
-	if (signo == SIGWINCH)
-	{
 
-		g_flagsignal = 1;
-
-		//exit(0);
-		// if (g_flagsignal != 0)
-		// {
-		// 	kill(g_flagsignal, SIGKILL);
-		// 	write(1, "\n", 1);
-		// 	g_flagsignal = 0;
-		// }
-		return ;
-	}
-}

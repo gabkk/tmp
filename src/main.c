@@ -23,15 +23,15 @@ int					main(int ac, char **av, char **envp)
 //	int				p;
 	char	*CD;
 
+
 //	p = 0;
 	(void)ac;
 	(void)envp;
 	arg = NULL;
 	g_flagsignal = 0;
-	if (signal(SIGWINCH, sig_handler) == SIG_ERR)
-		ft_putendl_fd("sig error", 2);
+	g_flagsignalz = 0;
+	signal_fct();
 	env = (t_env *)malloc(sizeof(t_env));
-	
 	env->del = 0;
 	env->tot = 0;
 
@@ -50,26 +50,18 @@ int					main(int ac, char **av, char **envp)
 		return (-1);
 	if (tcgetattr(0, &term) == -1)
 		return (-1);
-	int 	canon;
-	int 	echo;
-	int 	vim;
-	int 	tim;
 
 
-	canon = term.c_lflag;
-	echo = term.c_lflag;
 
-
+	g_canon = term.c_lflag;
+	g_echo = term.c_lflag;
+	g_vim = term.c_cc[VMIN];
+	g_tim = term.c_cc[VTIME];
+	term.c_cc[VMIN] = 1;
+	term.c_cc[VTIME] = 0;
 	term.c_lflag &= ~(ICANON);
 	term.c_lflag &= ~(ECHO);
 
-
-	vim = term.c_cc[VMIN];
-	tim = term.c_cc[VTIME];
-
-
-	term.c_cc[VMIN] = 1;
-	term.c_cc[VTIME] = 0;
 
 
 	if (tcsetattr(0, TCSADRAIN, &term) == -1)
@@ -95,26 +87,11 @@ int					main(int ac, char **av, char **envp)
 		tputs(CD, env->fd, useless);
 	}
 
-
-	//draw_argv(&arg, env);
-	poscur(0, 0, env);
+	//poscur(0, 0, env);
 	check_key(env, &arg);
 
-
-
-
-
-	close(env->fd);
-	free(env);
-
-	if (tcgetattr(0, &term) == -1)
-		return (-1);
-	term.c_lflag = canon;
-	term.c_lflag = echo;
-	term.c_cc[VMIN] = vim;
-	term.c_cc[VTIME] = tim;
-	if (tcsetattr(0, 0, &term) == -1)
-		return (-1);
+	//draw_argv(&arg, env);
+	exit_fct(env);
 	return (0);
 }
 
@@ -136,6 +113,7 @@ void		check_terminal(t_env *env)
 		exit(EXIT_FAILURE);
 	}
 	env->fd = open(name, O_RDWR | O_NONBLOCK);
+	g_fd = env->fd;
 	if(!(isatty(env->fd)))
 	{
 		ft_putendl_fd("Not a tty", 1);

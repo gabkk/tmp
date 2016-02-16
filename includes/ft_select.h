@@ -21,6 +21,7 @@
 # include <fcntl.h>
 # include <sys/ioctl.h>
 # include <stdio.h>
+# include <signal.h>
 
 # define ANSI_COLOR_UNDERLINE	"\x1b[4m\x1b[35m"
 # define ANSI_COLOR_RESET_UND	"\x1b[24m\x1b[0m"
@@ -54,7 +55,12 @@ typedef struct 			s_env{
 }						t_env;
 
 int						g_flagsignal;
-
+int						g_flagsignalz;
+int						g_fd;
+int						g_canon;
+int						g_echo;
+int						g_vim;
+int						g_tim;
 /*
 **	keyhook.c
 */
@@ -75,6 +81,7 @@ void				draw_argv(t_arg **arg, t_env *env);
 void				balise_ptr(t_arg *ptr, t_env *env);
 void				init_index(t_arg **arg, t_env *env);
 int					check_wsize(t_env *env);
+void				exit_fct(t_env *env);
 /*
 ** main.c
 */
@@ -96,6 +103,11 @@ void				del_list(t_arg **arg, t_env *env);
 */
 void				winsize(int fd, int i[2]);
 void				init_env(t_env *env, char **av);
+
+/*
+** signal.c
+*/
+void				signal_fct();
 void				sig_handler(int signo);
 
 #endif

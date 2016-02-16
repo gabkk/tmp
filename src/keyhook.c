@@ -32,9 +32,9 @@ void		check_key(t_env *env, t_arg **arg)
 //		j = 0;
 //		i = 0;
 		env->ymax = 0;
-		if (g_flagsignal == 1)
+		if (g_flagsignal == 1 || g_flagsignalz == 1)
 		{
-			tputs(tgetstr("bl", NULL), env->fd, useless);
+		//	tputs(tgetstr("bl", NULL), env->fd, useless);
 
 		//	init_env(env, NULL);
 			winsize(env->fd, env->j);
@@ -53,6 +53,7 @@ void		check_key(t_env *env, t_arg **arg)
 				ft_putstr_fd("Your terminal is too smallqqq", env->fd);
 			}
 			g_flagsignal = 0;
+			g_flagsignalz = 0;
 			//ft_putnbr_fd(ptr->x, env->fd);
 			//ft_putnbr_fd(ptr->y, env->fd);
 		}
@@ -78,7 +79,10 @@ void		check_key(t_env *env, t_arg **arg)
 					ptr = get_index(1, *arg);
 			}
 			else if (!buff[2])
-				exit(0);
+			{
+				exit_fct(env);
+				return ;
+			}
 			ptr->focus = 1;
 		}
 		
@@ -145,10 +149,9 @@ void		check_key(t_env *env, t_arg **arg)
 				ptr = ptr->next;
 			}
 
-
-//			ft_putstr("ok");
-
-
+//exit_fct(env);
+			
+			exit(0);
 			return;
 //			return ;
 			//exit(0);
@@ -161,7 +164,7 @@ void		check_key(t_env *env, t_arg **arg)
 		if (buff[0])
 		{
 			draw = check_wsize(env);
-			if (draw == 1)
+			if (draw == 1 || g_flagsignalz == 1)
 				redraw(arg, ptr, env);
 			else
 			{

@@ -20,7 +20,7 @@ INC = -I includes/ -I libft/includes
 
 SRCSDIR = src/
 
-SRCS = main.c init.c keyhook.c init_list.c init_env.c
+SRCS = main.c init.c keyhook.c init_list.c init_env.c signal.c
 
 
 OBJ = $(SRCS:.c=.o)
