@@ -40,7 +40,7 @@ void			sig_handler(int signo)
 	}
 	if (signo == SIGTSTP)
 	{
-	struct termios 	term;
+		struct termios 	term;
 
 	// poscur(0, 0, NULL);
 	// tputs(tgetstr("te", NULL), 1, useless);
@@ -67,7 +67,7 @@ void			sig_handler(int signo)
 				cmd[2] = '\0';
 
 
-				poscur(0, 0, NULL);
+				poscur(0, 0);
 				//close(g_fd);
 				//tputs(tgetstr("it", NULL), 1, useless);
 				 //Reconfigure SIGTSTP par son état par défaut

@@ -52,6 +52,8 @@ typedef struct 			s_env{
 		int				fd;
 		int				del;
 		int				ymax;
+		int				draw;
+		int				action;
 }						t_env;
 
 int						g_flagsignal;
@@ -65,8 +67,8 @@ int						g_tim;
 **	keyhook.c
 */
 void				check_key(t_env *env, t_arg **arg);
-void				redraw(t_arg **arg, t_arg *ptr, t_env *env);
-void				next_element(t_arg *arg, t_arg *ptr, t_env *env);
+void				redraw(t_arg **arg, t_arg *ptr, t_env **env);
+void				next_element(t_arg **arg, t_arg *ptr, t_env **env);
 t_arg				*get_index(int index, t_arg *arg);
 
 /*
@@ -75,13 +77,15 @@ t_arg				*get_index(int index, t_arg *arg);
 int					useless(int c);
 int					uselesse(int c);
 void				start_new_w(t_env *env);
-void				poscur(int x, int y, t_env *env);
+void				poscur(int x, int y);
 void				init_fd(char *path);
 void				draw_argv(t_arg **arg, t_env *env);
 void				balise_ptr(t_arg *ptr, t_env *env);
-void				init_index(t_arg **arg, t_env *env);
+void				init_index(t_arg **arg, t_env *env, t_arg *argfocus);
 int					check_wsize(t_env *env);
 void				exit_fct(t_env *env);
+int					reset_cursor(t_arg **arg, t_env *env);
+
 /*
 ** main.c
 */
@@ -96,7 +100,7 @@ int 				unset_term(struct termios term);
 void				init_list(t_arg **argu, char **av, t_env *env);
 void				addlist(t_arg **argu, char *av, int posx, int posy, int i);
 t_arg				*setmarg(int x, int y, char *av);
-void				del_list(t_arg **arg, t_env *env);
+t_arg				*del_list(t_arg **arg, t_env *env);
 
 /*
 ** init_env.c
@@ -109,5 +113,16 @@ void				init_env(t_env *env, char **av);
 */
 void				signal_fct();
 void				sig_handler(int signo);
+
+/*
+** keyhook_action.c
+*/
+void				read_input(t_arg **arg, t_arg **ptr, t_env **env);
+void				read_key(t_arg **arg, t_arg **ptr, t_env **env);
+void				read_arrow_esc(t_arg **arg, t_arg **ptr, t_env *env, char *buff);
+void				read_space(t_arg **ptr, t_env **env, t_arg **arg);
+void				read_del(t_arg **ptr, t_env **env, t_arg **arg);
+void				read_enter(t_env **env, t_arg **ptr, t_arg **arg);
+
 
 #endif

@@ -19,21 +19,16 @@ int					main(int ac, char **av, char **envp)
 	t_arg			*arg;
 	t_env			*env;
 	int				draw;
-//	char		*path;
-//	int				p;
 	char	*CD;
 
-
-//	p = 0;
 	(void)ac;
 	(void)envp;
+	draw = 0;
 	arg = NULL;
 	g_flagsignal = 0;
 	g_flagsignalz = 0;
 	signal_fct();
 	env = (t_env *)malloc(sizeof(t_env));
-	env->del = 0;
-	env->tot = 0;
 
 	check_terminal(env);
 	if (!av[1])
@@ -74,17 +69,17 @@ int					main(int ac, char **av, char **envp)
 
 	init_list(&arg, av, env);
 
-
-
 	draw = check_wsize(env);
+
+	
 	if (draw == 1)
 		draw_argv(&arg, env);
 	else
 	{
-		poscur(0, 0, env);
 		if ((CD = tgetstr("cd", NULL)) == NULL)
 			CD = tgetstr("cl", NULL);
 		tputs(CD, env->fd, useless);
+		ft_putstr_fd("Your terminal is too small", env->fd);
 	}
 
 	//poscur(0, 0, env);
@@ -97,14 +92,7 @@ int					main(int ac, char **av, char **envp)
 
 void		check_terminal(t_env *env)
 {
-//	int		fildes;
 	char	*name;
-//	int 	slot;
-
-//	slot = 0;
-//	fildes = 0;
-
-	/*              WTF IS THAT */
 
 	name = ttyname(0);
 	if (!name)
@@ -119,5 +107,4 @@ void		check_terminal(t_env *env)
 		ft_putendl_fd("Not a tty", 1);
 		exit(EXIT_FAILURE);
 	}
-//	slot = ttyslot();
 }

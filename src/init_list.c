@@ -93,28 +93,23 @@ void			init_list(t_arg **argu, char **av, t_env *env)
 	}
 }
 
-void			del_list(t_arg **arg, t_env *env)
+t_arg			*del_list(t_arg **arg, t_env *env)
 {
 	t_arg		*ptr;
 	t_arg		*tmp;
+	t_arg		*tmpfocus;
 
 	if (!(*arg))
 	{
 		exit_fct(env);
 		exit(0);
 	}
+	tmpfocus = NULL;
 	ptr = *arg;
 	while (ptr)
 	{
-		if (ptr->select == 1)
+		if (ptr->select == 1 || ptr->focus == 1)
 		{
-// 			if (!(ptr->prev) && !(ptr->next))
-// 			{
-// //				free(ptr);
-// 		ft_putendl_fd("Yy", env->fd);
-			
-// 				exit(0);
-// 			}
 			if (!ptr->next && ! ptr->prev)
 			{
 				free(ptr);
@@ -123,11 +118,11 @@ void			del_list(t_arg **arg, t_env *env)
 			}
 			if (ptr->next && ptr->prev)
 			{
+				if (ptr->focus == 1)
+					tmpfocus = ptr->next; // a faire sur le premier et dernier
 				ptr->prev->next = ptr->next;
 				ptr->next->prev = ptr->prev;
 				free(ptr);
-				// ptr = *arg;
-				// del_list(&ptr, env);
 			}
 			else if (!ptr->prev)
 			{
@@ -135,24 +130,23 @@ void			del_list(t_arg **arg, t_env *env)
 				free(ptr);
 				tmp->prev = NULL;
 				*arg = tmp;
-				// tmp->prev = NULL;
-				//*arg = tmp;
-				//del_list(arg, env);
 			 }
 			else if (!ptr->next)
 			{
 				ptr->prev->next = NULL;
 				free(ptr);
 			}
-			//free(ptr);
 		}
 		ptr = ptr->next;
 	}
+	if (tmpfocus)
+		tmpfocus->focus = 1;
 	env->cursorx = (*arg)->x;
 	env->cursory = (*arg)->y;
+	return (tmpfocus);
 }
 
-void			init_index(t_arg **arg, t_env *env)
+void			init_index(t_arg **arg, t_env *env, t_arg *argfocus)
 {
 	t_arg		*ptr;
 	int			i;
@@ -197,63 +191,10 @@ void			init_index(t_arg **arg, t_env *env)
 			x = 0;
 		}
 		ptr->index = i;
+		//(void)argfocus;
+		if (ptr != argfocus)
+			ptr->focus = 0;
 		i++;
 		ptr = ptr->next;
 	}
 }
-/*------------------------------*/
-
-/* add liste test*/
-
-	// {
-	// 	*argu = newm;
-	// 	first->next = last->next = NULL;
-	// 	first->prev = last->prev = NULL;
-	// 	return;
-	// }
-	// ptr = newm;
-	// last->next = newm;
-	// newm->prev = last;
-	// last = newm;
-	// last->next = first;
-	// first->prev = last;
-	
-
-	// if (!first)
-	// {
-	// 	first = newm;
-	// 	first->next = first;
-	// 	return ;
-	// }
-	// else
-	// {
-	// 	last = first;
-	// 	while (last->next != first)
-	// 		last = last->next;
-	// 	ptr = newm;
-	// 	ptr->next = first;
-	// 	ptr = first;
-	// 	last->next = newm;
-	// }
-	// *argu = first;
-
-/* GOOD ONE
-	if (!(*argu))
-	{
-		*argu = newm;
-		newm->name = av;
-		newm->next = NULL;
-		newm->prev = NULL;
-//		first = newm;
-//		first->next = *argu;
-	}
-	ptr = *argu;
-	while (ptr->next)
-		ptr = ptr->next;
-	ptr->next = newm;
-	ptr->next->prev = ptr;
-	newm->name = av;
-	newm->x = posx;
-	newm->y = posy;
-	newm->next = NULL;
-	*/
