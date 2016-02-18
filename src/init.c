@@ -48,6 +48,7 @@ void			draw_argv(t_arg **arg, t_env *env)
 	{
 		argfocus =  del_list(arg, env);
 		init_index(arg, env, argfocus);
+
 		env->del = 0;
 		//reset_focus(arg, env);
 		//poscur(0, 0, env);
@@ -100,24 +101,17 @@ void			draw_argv(t_arg **arg, t_env *env)
 		if (x < env->j[0] - 1)
 			ft_putchar_fd('\n', env->fd);
 	}
-//	ft_putnbr_fd(env->tot, env->fd);
-//	ft_putnbr_fd(env->j[0], env->fd);
-}
+	// ft_putnbr_fd(env->tot, env->fd);
+	// ft_putendl_fd("", env->fd);
+	// ft_putnbr_fd(env->j[0], env->fd);
+	// ft_putendl_fd("", env->fd);
+	// ft_putnbr_fd(env->j[1], env->fd);
+	// ft_putendl_fd("", env->fd);
+	// ft_putnbr_fd(env->wordmax, env->fd);
+	// ft_putendl_fd("", env->fd);
+	// ft_putnbr_fd((((env->tot + (env->tot / (env->j[0]))) / (env->j[0] - 1)) * (env->wordmax + 5)), env->fd);
 
-			/*responsive
-			x = 0;
-			y = 5;
-			while (x < 3)
-			{
-				write(fd, "\n", 1);
-				x++;
-			}
-			while (y <= ptr->y)
-			{
-				write(fd, "\t", 1);
-				y++;
-			}
-			end responsive*/
+}
 
 void		poscur(int x, int y)
 {
@@ -142,10 +136,13 @@ int			uselesse(int c)
 int			check_wsize(t_env *env)
 {
 	int		draw;
+	int		tmp;
 
 	draw = 0;
+	tmp = env->tot / (env->j[0]);
+	// tmp += env->tot;
 	//if (env->j[1] > (env->ymax + env->wordmax + 2))
-	if (env->j[1] > ((env->tot / env->j[0]) * (env->wordmax + 4)))
+	if (env->j[1] + tmp > (((env->tot + tmp) / (env->j[0] - 1)) * (env->wordmax + 8)) + env->wordmax)
 		draw = 1;
 	return (draw);
 }
@@ -156,10 +153,10 @@ void		balise_ptr(t_arg *ptr, t_env *env)
 		ft_putstr_fd(ANSI_COLOR_REVERSE, env->fd);
 	if (ptr->focus == 1)
 		ft_putstr_fd(ANSI_COLOR_UNDERLINE, env->fd);
-	// if (ptr->focus == 0)// GERER LE REsize pour faire un truc style
-	// 	ft_putstr_fd("  ", env->fd);
-	// else if (ptr->focus == 1)
-	// 	ft_putstr_fd("->", env->fd);
+	if (ptr->focus == 0)// GERER LE REsize pour faire un truc style
+		ft_putstr_fd("  ", env->fd);
+	else if (ptr->focus == 1)
+		ft_putstr_fd("->", env->fd);
 	ft_putstr_fd(ptr->name, env->fd);
 	if (ptr->focus == 1)
 		ft_putstr_fd(ANSI_COLOR_RESET_UND, env->fd);

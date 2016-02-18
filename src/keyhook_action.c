@@ -33,7 +33,7 @@ void		read_key(t_arg **arg, t_arg **ptr, t_env **env)
 {
 	char	buff[4];
 
-	read((*env)->fd , buff, 5);
+	read((*env)->fd , buff, 4);
 	if (buff[0] != 0)
 	{
 		if (buff[0] == 27)
@@ -65,7 +65,7 @@ void		read_key(t_arg **arg, t_arg **ptr, t_env **env)
 		return ;
 	}
 	(*env)->action = 1;
-	ft_bzero(buff, 3);
+	ft_bzero(buff, 4);
 }
 
 
@@ -81,14 +81,18 @@ void		read_arrow_esc(t_arg **arg, t_arg **ptr, t_env *env, char *buff)
 				(*ptr)->next->focus = 0;
 		}
 		else if ((*ptr))
+		{
 			(*ptr) = get_index(env->tot, *arg);
+		}
 	}
 	else if (buff[2] == 'B' ) //remettre a -1 quand on pourra aller a l element de la colonne suivante
 	{
 		if ((*ptr) && (*ptr)->next)
 			(*ptr) = (*ptr)->next;
 		else if ((*ptr))
+		{
 			(*ptr) = get_index(1, *arg);
+		}
 	}
 	else if (!buff[2]) //Esc
 	{
@@ -133,22 +137,10 @@ void		read_del(t_arg **ptr, t_env **env, t_arg **arg)
 {
 	if ((*env)->del == 0)
 		(*env)->del = 1;
-	if (!(*ptr)->next)
-	{
-		(*ptr) = get_index(1, *arg);
-		(*ptr)->focus = 1;
-		(*env)->cursorx = (*ptr)->x;
-		(*env)->cursory = (*ptr)->y;
-		poscur((*ptr)->x, (*ptr)->y);
-	}
-	else if ((*ptr)->next)
-	{
-		(*ptr)->next->focus = 1;
-		(*env)->cursorx = (*ptr)->next->x;
-		(*env)->cursory = (*ptr)->next->y;
+	if ((*ptr)->next)
 		(*ptr) = (*ptr)->next;
-		poscur((*ptr)->x, (*ptr)->y);
-	}
+	else
+		(*ptr) = get_index(1, *arg);
 }
 
 void		read_enter(t_env **env, t_arg **ptr, t_arg **arg)

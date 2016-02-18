@@ -110,7 +110,7 @@ t_arg			*del_list(t_arg **arg, t_env *env)
 	{
 		if (ptr->select == 1 || ptr->focus == 1)
 		{
-			if (!ptr->next && ! ptr->prev)
+			if (!ptr->next && !ptr->prev)
 			{
 				free(ptr);
 				exit_fct(env);
@@ -119,13 +119,18 @@ t_arg			*del_list(t_arg **arg, t_env *env)
 			if (ptr->next && ptr->prev)
 			{
 				if (ptr->focus == 1)
-					tmpfocus = ptr->next; // a faire sur le premier et dernier
+				 	tmpfocus = ptr->next; // a faire sur le premier et dernier
 				ptr->prev->next = ptr->next;
 				ptr->next->prev = ptr->prev;
+				//env->cursorx = tmpfocus->x;
+				//env->cursory = focus->y;
 				free(ptr);
+				//ptr = tmpfocus;
 			}
 			else if (!ptr->prev)
-			{
+			{				
+				if (ptr->focus == 1)
+					tmpfocus = get_index(2, *arg);
 				tmp = ptr->next;
 				free(ptr);
 				tmp->prev = NULL;
@@ -133,16 +138,19 @@ t_arg			*del_list(t_arg **arg, t_env *env)
 			 }
 			else if (!ptr->next)
 			{
+				if (ptr->focus == 1)
+					tmpfocus = get_index(1, *arg);
 				ptr->prev->next = NULL;
 				free(ptr);
+				//ptr = tmpfocus;
 			}
 		}
 		ptr = ptr->next;
 	}
 	if (tmpfocus)
 		tmpfocus->focus = 1;
-	env->cursorx = (*arg)->x;
-	env->cursory = (*arg)->y;
+	// env->cursorx = (*arg)->x;
+	// env->cursory = (*arg)->y;
 	return (tmpfocus);
 }
 
@@ -161,6 +169,7 @@ void			init_index(t_arg **arg, t_env *env, t_arg *argfocus)
 	x = -1;
 	env->tot = 0;
 	env->wordmax = 0;
+	(void)argfocus;
 	if (!*arg)
 		exit(0);
 	while (ptr)
@@ -191,7 +200,6 @@ void			init_index(t_arg **arg, t_env *env, t_arg *argfocus)
 			x = 0;
 		}
 		ptr->index = i;
-		//(void)argfocus;
 		if (ptr != argfocus)
 			ptr->focus = 0;
 		i++;

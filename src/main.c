@@ -52,8 +52,8 @@ int					main(int ac, char **av, char **envp)
 	g_echo = term.c_lflag;
 	g_vim = term.c_cc[VMIN];
 	g_tim = term.c_cc[VTIME];
-	term.c_cc[VMIN] = 1;
-	term.c_cc[VTIME] = 0;
+	term.c_cc[VMIN] = 0;
+	term.c_cc[VTIME] = 1;
 	term.c_lflag &= ~(ICANON);
 	term.c_lflag &= ~(ECHO);
 

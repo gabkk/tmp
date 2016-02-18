@@ -32,7 +32,7 @@ void		check_key(t_env *env, t_arg **arg)
 		//	tputs(tgetstr("bl", NULL), env->fd, useless);
 		//	init_env(env, NULL);
 			winsize(env->fd, env->j);
-			init_index(arg, env, *arg);
+			init_index(arg, env, ptr);
 			env->draw = check_wsize(env);
 			if (env->draw == 1)
 				redraw(arg, ptr, &env);
@@ -75,7 +75,7 @@ void		redraw(t_arg **arg, t_arg *ptr, t_env **env)
 	if ((CD = tgetstr("cd", NULL)) == NULL)
 	CD = tgetstr("cl", NULL);
 	tputs(CD, (*env)->fd, useless);
-	ptr->focus = 1;
+	//ptr->focus = 1;
 	draw_argv(arg, *env);
 	//if (next_element(arg, ptr, env) == 1)
 
