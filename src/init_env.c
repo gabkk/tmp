@@ -56,12 +56,9 @@ void			poscur(int x, int y, t_env *env)
 int				check_wsize(t_env *env)
 {
 	int			draw;
-	int			tmp;
 
 	draw = 0;
-	tmp = env->tot / (env->j[0]);
-	if (env->j[1] + tmp > (((env->tot + tmp) / (env->j[0] - 1))\
-		* (env->wordmax + 8)) + env->wordmax)
+	if (env->j[1] > ((env->tot / (env->j[0] - 1)) + 1) * (env->wordmax + 6))
 		draw = 1;
 	return (draw);
 }

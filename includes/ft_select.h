@@ -143,4 +143,10 @@ void					read_space(t_arg **ptr, t_env **env, t_arg **arg);
 void					read_del(t_arg **ptr, t_env **env, t_arg **arg);
 void					read_enter(t_env **env, t_arg **ptr, t_arg **arg);
 
+/*
+** tool.c
+*/
+t_arg					*get_right(t_arg **arg, t_arg *ptr, t_env *env);
+t_arg					*get_left(t_arg **arg, t_arg *source, t_env *env);
+
 #endif

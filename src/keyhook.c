@@ -24,7 +24,7 @@ void				check_key(t_env *env, t_arg **arg)
 	poscur(0, 0, env);
 	while (1)
 	{
-		env->ymax = 0;
+		//env->ymax = 0;
 		env->draw = check_wsize(env);
 		if (g_flagsignal == 1 || g_flagsignalz == 1)
 			check_signal(arg, ptr, env);

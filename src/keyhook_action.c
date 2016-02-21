@@ -37,6 +37,9 @@ void				read_key(t_arg **arg, t_arg **ptr, t_env **env)
 
 void				read_a(t_arg **arg, t_arg **ptr, t_env *env, char *bf)
 {
+	t_arg			*tmp;
+	
+	tmp = NULL;
 	(*ptr)->focus = 0;
 	if (bf[2] == 'A')
 	{
@@ -55,6 +58,16 @@ void				read_a(t_arg **arg, t_arg **ptr, t_env *env, char *bf)
 			(*ptr) = (*ptr)->next;
 		else if ((*ptr))
 			(*ptr) = get_index(1, *arg);
+	}
+	else if (bf[2] == 'C') // droite
+	{
+		if ((*ptr) && (tmp = get_right(arg, *ptr, env)))
+			(*ptr) = tmp;
+	}
+	else if (bf[2] == 'D') //gauche
+	{
+		if ((*ptr) && (tmp = get_left(arg, *ptr, env)))
+			(*ptr) = (*ptr)->next;
 	}
 	else if (!bf[2])
 	{

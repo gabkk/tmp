@@ -49,6 +49,16 @@ void				draw_argv(t_arg **arg, t_env *env)
 		if (x < env->j[0] - 1)
 			ft_putchar_fd('\n', env->fd);
 	}
+	// ft_putendl_fd("", env->fd);
+	// ft_putnbr_fd(env->tot, env->fd);
+	// ft_putendl_fd("", env->fd);
+	// ft_putnbr_fd(env->j[0], env->fd);
+	// ft_putendl_fd("", env->fd);
+	// ft_putnbr_fd(env->j[1], env->fd);
+	ft_putendl_fd("", env->fd);
+	ft_putnbr_fd(env->ymax, env->fd);
+	ft_putendl_fd("", env->fd);
+	ft_putnbr_fd(env->wordmax, env->fd);
 }
 
 void				draw_argv_loop(t_arg *ptr, t_env *env, int x, int *rt)
@@ -66,6 +76,7 @@ void				draw_argv_loop(t_arg *ptr, t_env *env, int x, int *rt)
 			else
 				size = 2;
 			balise_ptr(ptr, env);
+			ft_putnbr_fd(ptr->y, env->fd);
 			while (size > 0)
 			{
 				ft_putchar_fd(' ', env->fd);
