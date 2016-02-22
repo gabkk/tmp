@@ -131,6 +131,8 @@ void					init_fd(char *path);
 void					signal_fct(void);
 void					sig_handler(int signo);
 void					sig_stp(void);
+void					sig_cont(void);
+void					sig_int(void);
 
 /*
 ** keyhook_action.c
@@ -157,4 +159,6 @@ void					read_a_other(t_arg **a, t_arg **p, t_env *e, char *bf);
 void					init_term(t_env *env);
 void					check_terminal(t_env *env);
 void					read_input(t_arg **a, t_arg **p, t_env **e, char **av);
+void					reset_env_max(t_env **env, t_arg **arg);
+
 #endif

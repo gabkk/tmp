@@ -41,6 +41,7 @@ void				check_signal(t_arg **arg, t_arg *ptr, t_env *env)
 {
 	winsize(env->fd, env->j);
 	init_index(arg, env, ptr);
+	reset_env_max(&env, arg);
 	env->draw = check_wsize(env);
 	if (env->draw == 1)
 		redraw(arg, ptr, &env);

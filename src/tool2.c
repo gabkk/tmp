@@ -100,3 +100,19 @@ void					read_input(t_arg **a, t_arg **p, t_env **e, char **av)
 		}
 	}
 }
+
+void					reset_env_max(t_env **env, t_arg **arg)
+{
+	t_arg				*ptr;
+
+	(*env)->ymax = 0;
+	ptr = *arg;
+	while (ptr)
+	{
+		if (ptr->y > (*env)->ymax)
+			(*env)->ymax = ptr->y;
+		if ((int)ft_strlen(ptr->name) > (*env)->wordmax)
+			(*env)->wordmax = ft_strlen(ptr->name);
+		ptr = ptr->next;
+	}
+}
