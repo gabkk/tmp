@@ -21,7 +21,7 @@ INC = -I includes/ -I libft/includes
 SRCSDIR = src/
 
 SRCS = main.c init.c keyhook.c init_list.c init_env.c signal.c keyhook_action.c\
-		del_liste.c init_index.c tool.c
+		del_liste.c init_index.c tool.c tool2.c
 		
 
 

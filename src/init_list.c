@@ -65,14 +65,14 @@ t_arg			*setmarg(int posx, int posy, char *av)
 	return (newm);
 }
 
-void			init_list(t_arg **argu, char **av, t_env *env)
+void			init_list(t_arg **argu, char **av, t_env **env)
 {
 	int			i;
 	int			margex;
 	int			posx;
 	int			posy;
 
-	margex = env->j[0];
+	margex = (*env)->j[0];
 	posy = 0;
 	posx = -1;
 	i = 1;
@@ -82,10 +82,10 @@ void			init_list(t_arg **argu, char **av, t_env *env)
 			posx++;
 		else
 		{
-			margex += env->j[0] - 1;
-			posy += env->wordmax + 2;
-			if (env->ymax < posy)
-				env->ymax = posy;
+			margex += (*env)->j[0] - 1;
+			posy += (*env)->wordmax + 2;
+			if ((*env)->ymax < posy)
+				(*env)->ymax = posy;
 			posx = 0;
 		}
 		addlist(argu, av[i], posx, posy);

@@ -12,7 +12,7 @@
 
 #include "ft_select.h"
 
-void				check_key(t_env *env, t_arg **arg)
+void				check_key(t_env *env, t_arg **arg, char **av)
 {
 	t_arg			*ptr;
 
@@ -24,7 +24,6 @@ void				check_key(t_env *env, t_arg **arg)
 	poscur(0, 0, env);
 	while (1)
 	{
-		//env->ymax = 0;
 		env->draw = check_wsize(env);
 		if (g_flagsignal == 1 || g_flagsignalz == 1)
 			check_signal(arg, ptr, env);
@@ -33,7 +32,7 @@ void				check_key(t_env *env, t_arg **arg)
 			draw_small(env);
 			env->action = 1;
 		}
-		read_input(arg, &ptr, &env);
+		read_input(arg, &ptr, &env, av);
 	}
 	return ;
 }

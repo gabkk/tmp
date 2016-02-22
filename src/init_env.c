@@ -32,8 +32,10 @@ void			init_env(t_env *env, char **av)
 	env->wordmax = 0;
 	env->del = 0;
 	env->tot = 0;
+	env->all = 0;
 	env->cursorx = 0;
 	env->cursory = 0;
+	env->color = 35;
 	if (!*av)
 		return ;
 	while (av[i])

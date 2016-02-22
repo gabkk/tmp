@@ -49,16 +49,6 @@ void				draw_argv(t_arg **arg, t_env *env)
 		if (x < env->j[0] - 1)
 			ft_putchar_fd('\n', env->fd);
 	}
-	// ft_putendl_fd("", env->fd);
-	// ft_putnbr_fd(env->tot, env->fd);
-	// ft_putendl_fd("", env->fd);
-	// ft_putnbr_fd(env->j[0], env->fd);
-	// ft_putendl_fd("", env->fd);
-	// ft_putnbr_fd(env->j[1], env->fd);
-	ft_putendl_fd("", env->fd);
-	ft_putnbr_fd(env->ymax, env->fd);
-	ft_putendl_fd("", env->fd);
-	ft_putnbr_fd(env->wordmax, env->fd);
 }
 
 void				draw_argv_loop(t_arg *ptr, t_env *env, int x, int *rt)
@@ -76,7 +66,6 @@ void				draw_argv_loop(t_arg *ptr, t_env *env, int x, int *rt)
 			else
 				size = 2;
 			balise_ptr(ptr, env);
-			ft_putnbr_fd(ptr->y, env->fd);
 			while (size > 0)
 			{
 				ft_putchar_fd(' ', env->fd);
@@ -90,19 +79,30 @@ void				draw_argv_loop(t_arg *ptr, t_env *env, int x, int *rt)
 
 void				balise_ptr(t_arg *ptr, t_env *env)
 {
+	char			*tmp2;
+	char			*tmp;
+	char			*color;
+	char			*colorunder;
+
+	tmp = ft_itoa(env->color);
+	tmp2 = ft_strjoin(tmp, "m");
+	free(tmp);
+	color = ft_strjoin(ANSI_COLOR_UNDERLINE, tmp2);
+	colorunder = ft_strjoin(ANSI_COLOR_REVERSE, tmp2);
+	free(tmp2);
 	if (ptr->select == 1)
-		ft_putstr_fd(ANSI_COLOR_REVERSE, env->fd);
+		ft_putstr_fd(colorunder, env->fd);
 	if (ptr->focus == 1)
-		ft_putstr_fd(ANSI_COLOR_UNDERLINE, env->fd);
-	if (ptr->focus == 0)
-		ft_putstr_fd("  ", env->fd);
-	else if (ptr->focus == 1)
+		ft_putstr_fd(color, env->fd);
+	(ptr->focus == 0) ? (ft_putstr_fd("  ", env->fd)) :\
 		ft_putstr_fd("->", env->fd);
 	ft_putstr_fd(ptr->name, env->fd);
 	if (ptr->focus == 1)
 		ft_putstr_fd(ANSI_COLOR_RESET_UND, env->fd);
 	if (ptr->select == 1)
 		ft_putstr_fd(ANSI_COLOR_RESET_REV, env->fd);
+	free(color);
+	free(colorunder);
 }
 
 void				exit_fct(t_env *env)

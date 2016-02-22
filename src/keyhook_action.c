@@ -12,34 +12,37 @@
 
 #include "ft_select.h"
 
-void				read_key(t_arg **arg, t_arg **ptr, t_env **env)
+void				read_key(t_arg **a, t_arg **p, t_env **e, char **av)
 {
 	char	buff[4];
 
-	read((*env)->fd, buff, 4);
+	read((*e)->fd, buff, 4);
 	if ((buff[0] > 12 && buff[0] <= 127) || buff[0] == '\n')
 	{
 		if (buff[0] == 27)
-			read_a(arg, ptr, *env, buff);
+			read_a(a, p, *e, buff);
 		if (buff[0] == 32)
-			read_space(ptr, env, arg);
+			read_space(p, e, a);
 		if (buff[0] == 127 || (buff[0] == 27 && buff[2] == '3'))
-			read_del(ptr, env, arg);
+			read_del(p, e, a);
+		if (buff[0] == 'a')
+			select_all(a, e);
+		if (buff[0] == 'r')
+			*p = reset_arg(a, e, av);
+		if (buff[0] == '+' || buff[0] == '-')
+			change_color(e, buff[0]);
 		if (buff[0] == '\n')
-			read_enter(env, ptr, arg);
-		(*env)->action = 0;
+			read_enter(e, p, a);
+		(*e)->action = 0;
 		ft_bzero(buff, 3);
 		return ;
 	}
-	(*env)->action = 1;
+	(*e)->action = 1;
 	ft_bzero(buff, 4);
 }
 
 void				read_a(t_arg **arg, t_arg **ptr, t_env *env, char *bf)
 {
-	t_arg			*tmp;
-	
-	tmp = NULL;
 	(*ptr)->focus = 0;
 	if (bf[2] == 'A')
 	{
@@ -52,28 +55,7 @@ void				read_a(t_arg **arg, t_arg **ptr, t_env *env, char *bf)
 		else if ((*ptr))
 			(*ptr) = get_index(env->tot, *arg);
 	}
-	else if (bf[2] == 'B')
-	{
-		if ((*ptr) && (*ptr)->next)
-			(*ptr) = (*ptr)->next;
-		else if ((*ptr))
-			(*ptr) = get_index(1, *arg);
-	}
-	else if (bf[2] == 'C') // droite
-	{
-		if ((*ptr) && (tmp = get_right(arg, *ptr, env)))
-			(*ptr) = tmp;
-	}
-	else if (bf[2] == 'D') //gauche
-	{
-		if ((*ptr) && (tmp = get_left(arg, *ptr, env)))
-			(*ptr) = (*ptr)->next;
-	}
-	else if (!bf[2])
-	{
-		exit_fct(env);
-		exit(0);
-	}
+	read_a_other(arg, ptr, env, bf);
 	(*ptr)->focus = 1;
 }
 

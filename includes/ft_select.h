@@ -23,10 +23,9 @@
 # include <stdio.h>
 # include <signal.h>
 
-# define ANSI_COLOR_UNDERLINE	"\x1b[4m\x1b[35m"
+# define ANSI_COLOR_UNDERLINE	"\x1b[4m\x1b[38;5;"
 # define ANSI_COLOR_RESET_UND	"\x1b[24m\x1b[0m"
-
-# define ANSI_COLOR_REVERSE		"\x1b[7m\x1b[35m"
+# define ANSI_COLOR_REVERSE		"\x1b[7m\x1b[38;5;"
 # define ANSI_COLOR_RESET_REV	"\x1b[27m\x1b[0m"
 
 typedef struct			s_arg{
@@ -58,6 +57,8 @@ typedef struct			s_env{
 	int					echo;
 	int					vim;
 	int					tim;
+	int					all;
+	int					color;
 }						t_env;
 
 int						g_flagsignal;
@@ -66,7 +67,7 @@ int						g_flagsignalz;
 /*
 **	keyhook.c
 */
-void					check_key(t_env *env, t_arg **arg);
+void					check_key(t_env *env, t_arg **arg, char **av);
 void					check_signal(t_arg **arg, t_arg *ptr, t_env *env);
 void					draw_small(t_env *env);
 void					redraw(t_arg **arg, t_arg *ptr, t_env **env);
@@ -86,15 +87,12 @@ void					exit_fct(t_env *env);
 ** main.c
 */
 void					main_body(t_env *env, char **av, t_arg *arg);
-void					init_term(t_env *env);
-void					check_terminal(t_env *env);
-void					read_input(t_arg **arg, t_arg **ptr, t_env **env);
 
 /*
 ** init_list.c
 */
 
-void					init_list(t_arg **argu, char **av, t_env *env);
+void					init_list(t_arg **argu, char **av, t_env **env);
 void					addlist(t_arg **argu, char *av, int px, int py);
 t_arg					*setmarg(int x, int y, char *av);
 void					init_first(t_arg **newm, char *av);
@@ -137,7 +135,7 @@ void					sig_stp(void);
 /*
 ** keyhook_action.c
 */
-void					read_key(t_arg **arg, t_arg **ptr, t_env **env);
+void					read_key(t_arg **a, t_arg **p, t_env **e, char **av);
 void					read_a(t_arg **arg, t_arg **ptr, t_env *env, char *bf);
 void					read_space(t_arg **ptr, t_env **env, t_arg **arg);
 void					read_del(t_arg **ptr, t_env **env, t_arg **arg);
@@ -148,5 +146,15 @@ void					read_enter(t_env **env, t_arg **ptr, t_arg **arg);
 */
 t_arg					*get_right(t_arg **arg, t_arg *ptr, t_env *env);
 t_arg					*get_left(t_arg **arg, t_arg *source, t_env *env);
+t_arg					*reset_arg(t_arg **arg, t_env **env, char **av);
+void					select_all(t_arg **arg, t_env **env);
+void					change_color(t_env **env, char c);
 
+/*
+** tool2.c
+*/
+void					read_a_other(t_arg **a, t_arg **p, t_env *e, char *bf);
+void					init_term(t_env *env);
+void					check_terminal(t_env *env);
+void					read_input(t_arg **a, t_arg **p, t_env **e, char **av);
 #endif
