@@ -12,7 +12,7 @@
 
 NAME = ft_select
 
-CFLAGS = -Wall -Wextra -Werror -c
+CFLAGS = -Wall -Werror -c
 
 LFLAGS = -L libft -lft -ltermcap
 
