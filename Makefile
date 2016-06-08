@@ -6,40 +6,57 @@
 #    By: gkuma <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/11 11:58:27 by gkuma             #+#    #+#              #
-#    Updated: 2016/02/15 19:11:29 by gkuma            ###   ########.fr        #
+#    Updated: 2016/06/08 15:50:20 by gkuma            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = ft_select
+NAME = libfts.a
 
-CFLAGS = -Wall -Werror -c
+NFLAGS = /nfs/2014/g/gkuma/.brew/Cellar/nasm/2.12.01/bin/nasm -f macho64
 
-LFLAGS = -L libft -lft -ltermcap
-
-INC = -I includes/ -I libft/includes
+LFLAGS = -rsc
 
 SRCSDIR = src/
 
-SRCS = main.c init.c keyhook.c init_list.c init_env.c signal.c keyhook_action.c\
-		del_liste.c init_index.c tool.c tool2.c
+SRC = ft_bzero.s ft_strcat.s ft_isascii.s ft_isalpha.s\
+ft_isdigit.s ft_isalnum.s ft_isprint.s ft_toupper.s\
+ft_tolower.s ft_puts.s ft_memset.s ft_memcpy.s\
+ft_strdup.s ft_cat.s ft_putstr.s ft_strlen.s ft_memalloc.s\
+ft_memchr.s ft_strcmp.s ft_strncmp.s
 
-OBJ = $(SRCS:.c=.o)
+BONUS = ft_putstr.s ft_bzero.s\
+ft_tolower.s ft_strlen.s ft_puts.s ft_memset.s ft_memcpy.s\
+ft_strdup.s ft_memalloc.s ft_memchr.s ft_strcmp.s ft_strncmp.s
+
+SRCLST = $(addprefix $(SRCSDIR),$(SRC))
+
+BONUSLST = $(addprefix $(SRCSDIR),$(BONUS))
+
+OBJ = $(SRCLST:.s=.o)
+
+OBJB = $(BONUSLST:.s=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	gcc $(INC) -o  $(NAME) $(OBJ) $(LFLAGS)
+$(NAME):$(OBJ)
+	ar $(LFLAGS) $(NAME) $(OBJ)
 
-$(OBJ): $(addprefix $(SRCSDIR),$(SRCS))
-	make -C libft/
-	gcc $(CFLAGS) $(INC) $(addprefix $(SRCSDIR),$(SRCS)) $(LFLAGGS)
+$(SRCDIR)%.o: $(SRCDIR)%.s
+	$(NFLAGS) -o $@ $< 
 
-norme:
+main:
+	gcc -Wall -Wextra -Werror main.c $(OBJ)
+
+bonus:
+	gcc -Wall -Wextra -Werror bonus.c $(OBJB)
+
+main2:
+	gcc -Wall -Wextra -Werror main2.c $(OBJ)
 
 clean:
-	rm -rf $(OBJ)
+	@rm -rf $(OBJ)
 
 fclean: clean
-	rm -rf $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
