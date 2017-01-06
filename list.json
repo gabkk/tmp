@@ -1,0 +1,57 @@
+[
+    {
+        "name": "DJI",
+        "drones": [
+            {
+                "name": "Mavic",
+                "price": 1199.99,
+                "currency": "EUR"
+            },
+            {
+                "name": "Phantom 4",
+                "price": 1129.00,
+                "currency": "EUR"
+            },
+            {
+                "name": "Phantom 3",
+                "price": 528.88,
+                "currency": "EUR"
+            },
+            {
+                "name": "Inspire 1",
+                "price": 4199.00,
+                "currency": "USD"
+            }
+        ]
+    },
+    {
+        "name": "Parrot",
+        "drones": [
+            {
+                "name": "AR Drone 2",
+                "price": 299.99,
+                "currency": "USD"
+            },
+            {
+                "name": "Disco",
+                "price": 1299.99,
+                "currency": "USD"
+            }
+        ]
+    },
+    {
+        "name": "Yuneec",
+        "drones": [
+            {
+                "name": "Breeze",
+                "price": 462.27,
+                "currency": "EUR"
+            },
+            {
+                "name": "Typhoon H",
+                "price": 1211.03,
+                "currency": "EUR"
+            }
+        ]
+    }
+]
